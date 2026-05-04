@@ -223,13 +223,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .confidence-bar {
-      height: 6px;
-      border-radius: 6px;
-      background: #1e3050;
-      margin-top: 10px;
-      overflow: hidden;
-    }
+    .confidence-bar { height: 6px; border-radius: 6px; background: #1e3050; margin-top: 10px; overflow: hidden; }
     .confidence-fill {
       height: 100%;
       border-radius: 6px;
@@ -254,11 +248,7 @@
       background: #000;
       transition: all 0.3s;
     }
-    .live-frame-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+    .live-frame-container iframe { width: 100%; height: 100%; border: none; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 200; }
     .modal.active { display: flex; }
     .modal-content {
@@ -324,7 +314,6 @@
     .pattern-tag.found { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
     .pattern-tag.notfound { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
     .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; }
-    /* Hacker style addon */
     .hacker-console {
       background: #0a0f18;
       border: 1px solid #00ff88;
@@ -542,34 +531,77 @@
     </div>
   </div>
 
-  <footer>
-    <div class="container">© 2026 Tài Xỉu Tool Pro. All rights reserved.</div>
-  </footer>
+  <footer><div class="container">© 2026 Tài Xỉu Tool Pro. All rights reserved.</div></footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <script>
-    // ==================== DATABASE ====================
-    const STORAGE_USERS = 'tx_users_v8';
-    const STORAGE_CURRENT = 'tx_current_user';
-    const STORAGE_REMEMBER = 'tx_remember_user';
-    const STORAGE_PENDING = 'tx_pending_deposits';
-    const STORAGE_ADMIN = 'tx_admin_logged';
+    // ==================== FIREBASE CONFIG ====================
+    firebase.initializeApp({
+      apiKey: "AIzaSyB6mK1ZGSERr0btcW3gSOKAWXp9JbFPVnA",
+      authDomain: "ngducduytoolvip.firebaseapp.com",
+      projectId: "ngducduytoolvip",
+      storageBucket: "ngducduytoolvip.firebasestorage.app",
+      messagingSenderId: "136250698369",
+      appId: "1:136250698369:web:32b08c0de836c2d5ef7b80"
+    });
+    const db = firebase.database();
+
+    // ==================== DATABASE PATHS (thay thế localStorage) ====================
+    const DB_PATH_USERS = 'users';           // object: { username: userData }
+    const DB_PATH_PENDING = 'pendingDeposits'; // object: { depositCode: depositData }
+
+    // Session keys (giữ nguyên trên máy khách, không đưa lên DB)
+    const SESSION_CURRENT_USER = 'tx_current_user';
+    const SESSION_ADMIN = 'tx_admin_logged';
+    const LOCAL_REMEMBER = 'tx_remember_user';
+
+    // Hàm tiện ích đọc/ghi DB
+    async function dbGetUsers() {
+      const snap = await db.ref(DB_PATH_USERS).once('value');
+      return snap.val() || {};
+    }
+    async function dbSetUsers(users) {
+      await db.ref(DB_PATH_USERS).set(users);
+    }
+    async function dbGetPending() {
+      const snap = await db.ref(DB_PATH_PENDING).once('value');
+      return snap.val() || {};
+    }
+    async function dbSetPending(pending) {
+      await db.ref(DB_PATH_PENDING).set(pending);
+    }
+
+    // Quản lý phiên đăng nhập hiện tại
+    function getCurrentUser() { return sessionStorage.getItem(SESSION_CURRENT_USER); }
+    function setCurrentUser(u) { sessionStorage.setItem(SESSION_CURRENT_USER, u || ''); }
+    function getRememberedUser() { return localStorage.getItem(LOCAL_REMEMBER); }
+    function setRememberedUser(u) { u ? localStorage.setItem(LOCAL_REMEMBER, u) : localStorage.removeItem(LOCAL_REMEMBER); }
+    function isAdminLoggedIn() { return sessionStorage.getItem(SESSION_ADMIN) === 'true'; }
+    function setAdminLoggedIn(v) { v ? sessionStorage.setItem(SESSION_ADMIN, 'true') : sessionStorage.removeItem(SESSION_ADMIN); }
+
+    // Lấy dữ liệu user hiện tại (async)
+    async function getUserData() {
+      const username = getCurrentUser();
+      if (!username) return null;
+      const users = await dbGetUsers();
+      return users[username] || null;
+    }
+
+    // Cập nhật dữ liệu user hiện tại
+    async function saveUserData(data) {
+      const username = getCurrentUser();
+      if (!username) return;
+      await db.ref(DB_PATH_USERS + '/' + username).set(data);
+    }
+
+    // ==================== CONSTANTS ====================
     const API_NOHU = 'https://wtx.macminim6.online/v1/tx/lite-sessions?cp=R&cl=R&pf=web&at=a73569fe41bbc7f8f6a2c1796b75a90f';
     const API_MD5 = 'https://wtxmd52.macminim6.online/v1/txmd5/lite-sessions?cp=R&cl=R&pf=web&at=a73569fe41bbc7f8f6a2c1796b75a90f';
     const API_CHANLE = 'https://wcl.macminim6.online/v1/chanlefull/lite-sessions?cp=R&cl=R&pf=web&at=15f51cf639573b0b2823dc9eaca9960e';
     const BETVIP_URL = 'https://play.betvip.fit';
-
-    function getUsers() { try { return JSON.parse(localStorage.getItem(STORAGE_USERS) || '{}'); } catch(e) { return {}; } }
-    function saveUsers(u) { localStorage.setItem(STORAGE_USERS, JSON.stringify(u)); }
-    function getCurrentUser() { return localStorage.getItem(STORAGE_CURRENT); }
-    function setCurrentUser(u) { localStorage.setItem(STORAGE_CURRENT, u||''); }
-    function getRememberedUser() { return localStorage.getItem(STORAGE_REMEMBER); }
-    function setRememberedUser(u) { u ? localStorage.setItem(STORAGE_REMEMBER, u) : localStorage.removeItem(STORAGE_REMEMBER); }
-    function isAdminLoggedIn() { return sessionStorage.getItem(STORAGE_ADMIN) === 'true'; }
-    function setAdminLoggedIn(v) { v ? sessionStorage.setItem(STORAGE_ADMIN,'true') : sessionStorage.removeItem(STORAGE_ADMIN); }
-    function getUserData() { const u = getUsers(); const n = getCurrentUser(); return n && u[n] ? u[n] : null; }
-    function saveUserData(d) { const u = getUsers(); const n = getCurrentUser(); if (n) { u[n] = d; saveUsers(u); } }
-    function getPendingDeposits() { try { return JSON.parse(localStorage.getItem(STORAGE_PENDING) || '{}'); } catch(e) { return {}; } }
-    function savePendingDeposits(d) { localStorage.setItem(STORAGE_PENDING, JSON.stringify(d)); }
 
     const GAME_TYPES = {
       nohu: { name: 'Tài Xỉu Nổ Hũ', api: API_NOHU, icon: '🎰' },
@@ -577,11 +609,23 @@
       chanle: { name: 'Xóc Đĩa MD5', api: API_CHANLE, icon: '🎲', labels: { win: 'CHẴN', lose: 'LẺ' } }
     };
 
+    // ==================== TOOL STATES ====================
+    const toolStates = {
+      nohu: { running: false, interval: null, lastData: null, seqTX: [] },
+      md5: { running: false, interval: null, lastData: null, seqTX: [] },
+      chanle: { running: false, interval: null, lastData: null, seqTX: [] }
+    };
+
+    // ==================== HELPER FUNCTIONS (giữ nguyên từ bản gốc) ====================
     function getDisplayPrediction(gt, pred) {
       if (gt === 'chanle') {
         return pred === 'TÀI' ? 'CHẴN' : (pred === 'XỈU' ? 'LẺ' : pred);
       }
       return pred;
+    }
+    function getPackageName(t) {
+      const m = { '1h': '1 Giờ', '1d': '1 Ngày', '30d': '1 Tháng', 'forever': 'Vĩnh Viễn' };
+      return m[t] || t;
     }
 
     function getActiveSubscriptions() {
@@ -591,39 +635,7 @@
     function hasActiveSubscriptionFor(gt) { return getActiveSubscriptions().some(s => s.gameType === gt); }
     function canBuyPackageForGame(gt) { return !hasActiveSubscriptionFor(gt); }
 
-    let currentBuyPackage = null;
-    function openBuyModal(pkg, amt) {
-      const d = getUserData();
-      if (!d) { alert('Vui lòng đăng nhập'); return; }
-      if (d.balance < amt) { alert('Số dư không đủ.'); return; }
-      currentBuyPackage = { package: pkg, amount: amt };
-      document.getElementById('buyPackageInfo').innerText = `Gói ${getPackageName(pkg)} - Giá ${amt.toLocaleString()}đ`;
-      document.getElementById('buyGameType').value = 'nohu';
-      document.getElementById('buyMsg').innerText = '';
-      document.getElementById('buyModal').classList.add('active');
-    }
-    function closeBuyModal() { document.getElementById('buyModal').classList.remove('active'); currentBuyPackage = null; }
-    function confirmBuyPackage() {
-      if (!currentBuyPackage) return;
-      const gt = document.getElementById('buyGameType').value;
-      if (!canBuyPackageForGame(gt)) { document.getElementById('buyMsg').innerText = 'Bạn đã có key đang hoạt động cho bàn này. Hãy đợi hết hạn.'; return; }
-      const d = getUserData();
-      if (!d) return;
-      const { package: pkg, amount: amt } = currentBuyPackage;
-      if (d.balance < amt) { alert('Số dư không đủ.'); return; }
-      d.balance -= amt;
-      const key = 'TXKEY-' + Math.random().toString(36).substr(2,8).toUpperCase();
-      d.unactivatedKeys.push({ key, package: pkg, amount: amt, gameType: gt, createdAt: Date.now() });
-      d.purchaseHistory.push({ key, package: pkg, amount: amt, gameType: gt, time: Date.now() });
-      saveUserData(d); updateUI();
-      alert(`Đã mua key: ${key} cho bàn ${GAME_TYPES[gt]?.name || gt}. Vào Kích hoạt để dùng.`);
-      closeBuyModal();
-    }
-    function getPackageName(t) {
-      const m = { '1h':'1 Giờ', '1d':'1 Ngày', '30d':'1 Tháng', 'forever':'Vĩnh Viễn' };
-      return m[t] || t;
-    }
-
+    // ==================== NAVIGATION & UI ====================
     function navigateTo(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       ['pageHome','pageTool','pagePricing'].forEach(id => document.getElementById(id).classList.add('hidden'));
@@ -637,18 +649,19 @@
       window.scrollTo(0,0);
     }
 
-    function updateUI() {
-      const user = getCurrentUser();
+    async function updateUI() {
+      const username = getCurrentUser();
       const authArea = document.getElementById('authArea');
       const userArea = document.getElementById('userArea');
-      if (user) {
+      if (username) {
         authArea.classList.add('hidden');
         userArea.classList.remove('hidden');
-        const d = getUserData();
-        if (d) {
-          document.getElementById('usernameDisplay').innerText = user;
-          document.getElementById('balanceDisplay').innerText = (d.balance || 0).toLocaleString() + 'đ';
-          document.getElementById('navTool').classList.toggle('hidden', getActiveSubscriptions().length === 0);
+        const data = await getUserData();
+        if (data) {
+          document.getElementById('usernameDisplay').innerText = username;
+          document.getElementById('balanceDisplay').innerText = (data.balance || 0).toLocaleString() + 'đ';
+          const activeSubs = data.subscriptions ? data.subscriptions.filter(s => s.expiresAt > Date.now()) : [];
+          document.getElementById('navTool').classList.toggle('hidden', activeSubs.length === 0);
         }
       } else {
         authArea.classList.remove('hidden');
@@ -661,30 +674,12 @@
     }
 
     function updateToolVisibility() {
-      const active = getActiveSubscriptions();
-      const hasAny = active.length > 0;
+      const activeSubs = getActiveSubscriptions();
+      const hasAny = activeSubs.length > 0;
       document.getElementById('toolLocked').classList.toggle('hidden', hasAny);
       document.getElementById('toolActive').classList.toggle('hidden', !hasAny);
-      if (hasAny) renderToolTabs(active);
+      if (hasAny) renderToolTabs(activeSubs);
       else stopAllTools();
-    }
-
-    const toolStates = {
-      nohu: { running: false, interval: null, lastData: null, seqTX: [] },
-      md5: { running: false, interval: null, lastData: null, seqTX: [] },
-      chanle: { running: false, interval: null, lastData: null, seqTX: [] }
-    };
-
-    function stopAllTools() {
-      Object.keys(toolStates).forEach(gt => {
-        if (toolStates[gt].interval) clearInterval(toolStates[gt].interval);
-        toolStates[gt].running = false;
-        toolStates[gt].interval = null;
-        const frame = document.getElementById(`liveFrame_${gt}`);
-        if (frame) frame.src = '';
-        const container = document.getElementById(`toolLiveFrame_${gt}`);
-        if (container) container.classList.add('hidden');
-      });
     }
 
     function renderToolTabs(activeSubs) {
@@ -738,6 +733,267 @@
       `;
     }
 
+    // ==================== AUTH (giữ nguyên form đăng nhập/đăng ký) ====================
+    function openAuthModal(tab) {
+      document.getElementById('authModal').classList.add('active');
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('regUsername').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirm').value = '';
+      document.getElementById('rememberMe').checked = false;
+      document.getElementById('authMessage').innerText = '';
+      switchAuthTab(tab);
+    }
+    function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+    function switchAuthTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+    }
+
+    async function register() {
+      const u = document.getElementById('regUsername').value.trim();
+      const p = document.getElementById('regPassword').value;
+      const c = document.getElementById('regConfirm').value;
+      if (!u || !p) { document.getElementById('authMessage').innerText = 'Vui lòng điền đầy đủ.'; return; }
+      if (p !== c) { document.getElementById('authMessage').innerText = 'Mật khẩu không khớp.'; return; }
+      const users = await dbGetUsers();
+      if (users[u]) { document.getElementById('authMessage').innerText = 'Tên đăng nhập đã tồn tại.'; return; }
+      users[u] = { password: p, balance: 0, subscriptions: [], unactivatedKeys: [], depositHistory: [], purchaseHistory: [] };
+      await dbSetUsers(users);
+      alert('Đăng ký thành công! Mời đăng nhập.');
+      document.getElementById('regUsername').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirm').value = '';
+      switchAuthTab('login');
+      document.getElementById('loginUsername').value = u;
+    }
+
+    async function login() {
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value;
+      const remember = document.getElementById('rememberMe').checked;
+      if (!u || !p) { document.getElementById('authMessage').innerText = 'Vui lòng nhập đầy đủ.'; return; }
+      const users = await dbGetUsers();
+      if (!users[u] || users[u].password !== p) { document.getElementById('authMessage').innerText = 'Sai thông tin.'; return; }
+      setCurrentUser(u);
+      remember ? setRememberedUser(u) : setRememberedUser(null);
+      closeAuthModal();
+      updateUI();
+    }
+
+    function logout() {
+      if (confirm('Bạn muốn đăng xuất?')) {
+        stopAllTools();
+        setCurrentUser(null);
+        setRememberedUser(null);
+        updateUI();
+        navigateTo('home');
+      }
+    }
+
+    // Tự động đăng nhập nếu có remember
+    async function autoLogin() {
+      const remembered = getRememberedUser();
+      if (remembered) {
+        const users = await dbGetUsers();
+        if (users[remembered]) {
+          setCurrentUser(remembered);
+          updateUI();
+        }
+      }
+    }
+
+    // ==================== ADMIN (giữ nguyên hardcode) ====================
+    function openAdminLoginModal() {
+      document.getElementById('adminLoginModal').classList.add('active');
+      document.getElementById('adminUsername').value = '';
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('adminLoginMsg').innerText = '';
+    }
+    function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('active'); }
+    async function loginAdmin() {
+      if (document.getElementById('adminUsername').value.trim() === 'bolaadmin' && document.getElementById('adminPassword').value === 'Duy15052009') {
+        setAdminLoggedIn(true);
+        closeAdminLoginModal();
+        updateUI();
+        await loadPendingList();
+        await loadUsersList();
+      } else { document.getElementById('adminLoginMsg').innerText = 'Sai thông tin admin.'; }
+    }
+    async function logoutAdmin() { setAdminLoggedIn(false); updateUI(); }
+    function switchAdminTab(tab) {
+      document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
+      document.getElementById('tabUsers').classList.toggle('active', tab === 'users');
+      document.getElementById('adminTabPending').classList.toggle('hidden', tab !== 'pending');
+      document.getElementById('adminTabUsers').classList.toggle('hidden', tab !== 'users');
+      if (tab === 'pending') loadPendingList();
+      if (tab === 'users') loadUsersList();
+    }
+
+    async function loadPendingList() {
+      if (!isAdminLoggedIn()) return;
+      const pending = await dbGetPending();
+      const list = document.getElementById('pendingList');
+      const items = Object.entries(pending).filter(([, i]) => !i.approved && !i.rejected);
+      if (!items.length) { list.innerHTML = '<li style="padding:8px;color:#94a3b8;">Không có lệnh chờ.</li>'; return; }
+      list.innerHTML = items.map(([code, info]) => `<li style="padding:10px;border-bottom:1px solid #1a2740;display:flex;justify-content:space-between;align-items:center;">${code} - ${info.amount.toLocaleString()}đ (User: ${info.username}) <span><button class="btn-outline" style="padding:4px 12px;font-size:0.75rem;margin-left:6px;" onclick="approveDeposit('${code}')">Duyệt</button><button class="btn-outline" style="padding:4px 12px;font-size:0.75rem;margin-left:4px;border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${code}')">Từ chối</button></span></li>`).join('');
+    }
+
+    async function approveDeposit(code) {
+      if (!isAdminLoggedIn()) return;
+      const pending = await dbGetPending();
+      if (!pending[code] || pending[code].approved) return;
+      pending[code].approved = true;
+      const uname = pending[code].username;
+      const amt = pending[code].amount;
+      await dbSetPending(pending);
+      const users = await dbGetUsers();
+      if (users[uname]) {
+        users[uname].balance = (users[uname].balance || 0) + amt;
+        users[uname].depositHistory.push({ code, amount: amt, time: Date.now(), status: 'approved' });
+        await dbSetUsers(users);
+      }
+      alert('Đã duyệt ' + code);
+      loadPendingList();
+      if (uname === getCurrentUser()) updateUI();
+    }
+
+    async function rejectDeposit(code) {
+      if (!isAdminLoggedIn()) return;
+      const pending = await dbGetPending();
+      if (!pending[code]) return;
+      pending[code].rejected = true;
+      await dbSetPending(pending);
+      alert('Đã từ chối ' + code);
+      loadPendingList();
+    }
+
+    async function loadUsersList() {
+      if (!isAdminLoggedIn()) return;
+      const users = await dbGetUsers();
+      const tbody = document.getElementById('usersTableBody');
+      const rows = Object.entries(users).map(([username, data]) => {
+        const active = (data.subscriptions || []).filter(s => s.expiresAt > Date.now()).map(s => `${GAME_TYPES[s.gameType]?.name || s.gameType} (${getPackageName(s.package)})`).join(', ') || 'Không';
+        const unact = (data.unactivatedKeys || []).map(k => `${k.key} (${GAME_TYPES[k.gameType]?.name || k.gameType})`).join(', ') || 'Không';
+        return `<tr><td>${username}</td><td>${(data.balance || 0).toLocaleString()}đ</td><td>${active}</td><td>${unact}</td><td><button class="btn-outline" style="padding:4px 10px;font-size:0.7rem;" onclick="adminDeleteKey('${username}')">Xóa key</button></td></tr>`;
+      }).join('');
+      tbody.innerHTML = rows || '<tr><td colspan="5">Chưa có người chơi nào.</td></tr>';
+    }
+
+    async function adminDeleteKey(username) {
+      const users = await dbGetUsers();
+      if (users[username] && users[username].unactivatedKeys.length > 0) {
+        users[username].unactivatedKeys = [];
+        await dbSetUsers(users);
+        alert('Đã xóa key của ' + username);
+        loadUsersList();
+      } else { alert('Không có key để xóa.'); }
+    }
+
+    // ==================== NẠP TIỀN ====================
+    function openDepositModal() { document.getElementById('depositModal').classList.add('active'); document.getElementById('depositInfo').classList.add('hidden'); document.getElementById('depositAmount').value = ''; document.getElementById('depositMsg').innerText = ''; }
+    function closeDepositModal() { document.getElementById('depositModal').classList.remove('active'); }
+    async function createDeposit() {
+      const amt = parseInt(document.getElementById('depositAmount').value);
+      if (isNaN(amt) || amt < 50000) return alert('Tối thiểu 50,000đ');
+      const code = 'NAP' + Math.random().toString(36).substr(2, 6).toUpperCase();
+      const pending = await dbGetPending();
+      pending[code] = { amount: amt, username: getCurrentUser(), created: Date.now(), approved: false, rejected: false };
+      await dbSetPending(pending);
+      document.getElementById('qrDeposit').src = `https://img.vietqr.io/image/MB-499099999-compact2.png?amount=${amt}&addInfo=${code}&accountName=NGUYEN%20DUC%20DUY&size=300`;
+      document.getElementById('depositCode').innerText = code;
+      document.getElementById('depositAmountDisplay').innerText = amt.toLocaleString() + ' VNĐ';
+      document.getElementById('depositContent').innerText = code;
+      document.getElementById('depositInfo').classList.remove('hidden');
+      document.getElementById('depositMsg').innerText = 'Lệnh nạp đã tạo, chờ admin duyệt.';
+    }
+
+    // ==================== KÍCH HOẠT KEY ====================
+    function openActivateKeyModal() {
+      document.getElementById('activateKeyModal').classList.add('active');
+      document.getElementById('activateKeyInput').value = '';
+      document.getElementById('activateMsg').innerText = '';
+      const d = getUserData(); // sẽ gọi bất đồng bộ sau
+      updateActivateKeyList();
+    }
+    async function updateActivateKeyList() {
+      const d = await getUserData();
+      if (!d) return;
+      const list = document.getElementById('unactivatedKeysList');
+      if (d.unactivatedKeys.length === 0) list.innerHTML = '<li style="color:#94a3b8;">Không có key.</li>';
+      else list.innerHTML = d.unactivatedKeys.map(k => `<li style="padding:4px 0;">🔑 ${k.key} (${getPackageName(k.package)} - ${GAME_TYPES[k.gameType]?.name || k.gameType})</li>`).join('');
+    }
+    function closeActivateKeyModal() { document.getElementById('activateKeyModal').classList.remove('active'); }
+    async function activateKey() {
+      const inputKey = document.getElementById('activateKeyInput').value.trim();
+      if (!inputKey) return;
+      const d = await getUserData();
+      if (!d) return;
+      const idx = d.unactivatedKeys.findIndex(k => k.key === inputKey);
+      if (idx === -1) { document.getElementById('activateMsg').innerText = 'Key không hợp lệ.'; return; }
+      const ki = d.unactivatedKeys[idx];
+      const now = Date.now();
+      let exp;
+      switch (ki.package) { case '1h': exp = now + 3600000; break; case '1d': exp = now + 86400000; break; case '30d': exp = now + 30 * 86400000; break; case 'forever': exp = now + 1000 * 86400000 * 365 * 10; break; default: exp = now; }
+      d.subscriptions.push({ key: ki.key, package: ki.package, amount: ki.amount, gameType: ki.gameType, activatedAt: now, expiresAt: exp });
+      d.unactivatedKeys.splice(idx, 1);
+      await saveUserData(d);
+      updateUI();
+      document.getElementById('activateMsg').innerText = '✅ Kích hoạt thành công! Tool đã sẵn sàng.';
+      setTimeout(closeActivateKeyModal, 1500);
+    }
+
+    // ==================== TÀI KHOẢN ====================
+    async function openAccountModal() {
+      const d = await getUserData();
+      if (!d) return;
+      document.getElementById('accountIdDisplay').innerText = getCurrentUser();
+      document.getElementById('accountBalance').innerText = (d.balance || 0).toLocaleString() + 'đ';
+      document.getElementById('depositHistory').innerHTML = d.depositHistory.length === 0 ? '<li style="color:#94a3b8;">Chưa có.</li>' : d.depositHistory.map(h => `<li>🔹 ${h.code} - ${h.amount.toLocaleString()}đ (${h.status || 'approved'})</li>`).join('');
+      document.getElementById('purchaseHistory').innerHTML = d.purchaseHistory.length === 0 ? '<li style="color:#94a3b8;">Chưa có.</li>' : d.purchaseHistory.map(p => `<li>🛍️ ${p.key} (${getPackageName(p.package)} - ${GAME_TYPES[p.gameType]?.name || p.gameType}) - ${p.amount.toLocaleString()}đ</li>`).join('');
+      const active = d.subscriptions.filter(s => s.expiresAt > Date.now());
+      document.getElementById('activeSubscription').innerHTML = active.length === 0 ? '<p style="color:#94a3b8;">Không có gói hoạt động.</p>' : active.map(s => `<p>✅ ${s.key} (${getPackageName(s.package)} - ${GAME_TYPES[s.gameType]?.name || s.gameType}) đến ${new Date(s.expiresAt).toLocaleString()}</p>`).join('');
+      document.getElementById('accountModal').classList.add('active');
+    }
+    function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
+    function copyText(t) { navigator.clipboard.writeText(t).then(() => alert('Đã sao chép!')); }
+
+    // ==================== MUA KEY ====================
+    let currentBuyPackage = null;
+    async function openBuyModal(pkg, amt) {
+      const d = await getUserData();
+      if (!d) { alert('Vui lòng đăng nhập'); return; }
+      if (d.balance < amt) { alert('Số dư không đủ.'); return; }
+      currentBuyPackage = { package: pkg, amount: amt };
+      document.getElementById('buyPackageInfo').innerText = `Gói ${getPackageName(pkg)} - Giá ${amt.toLocaleString()}đ`;
+      document.getElementById('buyGameType').value = 'nohu';
+      document.getElementById('buyMsg').innerText = '';
+      document.getElementById('buyModal').classList.add('active');
+    }
+    function closeBuyModal() { document.getElementById('buyModal').classList.remove('active'); currentBuyPackage = null; }
+    async function confirmBuyPackage() {
+      if (!currentBuyPackage) return;
+      const gt = document.getElementById('buyGameType').value;
+      const d = await getUserData();
+      if (!d) return;
+      if (!canBuyPackageForGame(gt)) { document.getElementById('buyMsg').innerText = 'Bạn đã có key đang hoạt động cho bàn này. Hãy đợi hết hạn.'; return; }
+      const { package: pkg, amount: amt } = currentBuyPackage;
+      if (d.balance < amt) { alert('Số dư không đủ.'); return; }
+      d.balance -= amt;
+      const key = 'TXKEY-' + Math.random().toString(36).substr(2,8).toUpperCase();
+      d.unactivatedKeys.push({ key, package: pkg, amount: amt, gameType: gt, createdAt: Date.now() });
+      d.purchaseHistory.push({ key, package: pkg, amount: amt, gameType: gt, time: Date.now() });
+      await saveUserData(d);
+      updateUI();
+      alert(`Đã mua key: ${key} cho bàn ${GAME_TYPES[gt]?.name || gt}. Vào Kích hoạt để dùng.`);
+      closeBuyModal();
+    }
+
+    // ==================== TOOL LOGIC (giữ nguyên 100%) ====================
     async function fetchData(gt) {
       const apiUrl = GAME_TYPES[gt]?.api;
       const statusEl = document.getElementById(`apiStatusText_${gt}`);
@@ -767,7 +1023,7 @@
       }
     }
 
-    // ==================== PATTERN DETECTION ENGINE (chung) ====================
+    // Pattern detection engine (giữ nguyên)
     function detectAllPatterns(seqTX) {
       const total = seqTX.length;
       const results = [];
@@ -875,14 +1131,12 @@
       return results;
     }
 
-    // ==================== HACKER‑GRADE CHAN LE ENGINE ====================
     function runChanleTool(gt) {
       if (!toolStates[gt].running) return;
       const seqTX = toolStates[gt].seqTX;
       if (!seqTX || seqTX.length < 5) return;
       const total = seqTX.length;
 
-      // Markov up to order 8
       const allMarkov = [];
       const maxMarkovOrder = Math.min(8, total - 2);
       for (let order = 1; order <= maxMarkovOrder; order++) {
@@ -903,19 +1157,16 @@
       allMarkov.sort((a, b) => b.confidence - a.confidence || b.order - a.order);
       const bestMarkov = allMarkov[0] || { predict: 'TÀI', confidence: 50, order: 1, T: 50, X: 50 };
 
-      // Pattern detection with enhanced labels
       const allPatterns = detectAllPatterns(seqTX);
       const bestPattern = allPatterns.length > 0 ? allPatterns[0] : null;
 
-      // Entropy indicator
       const freqT = seqTX.filter(c => c === 'T').length;
       const freqX = total - freqT;
       const pT = freqT / total;
       const pX = freqX / total;
       const entropy = -(pT > 0 ? pT * Math.log2(pT) : 0) - (pX > 0 ? pX * Math.log2(pX) : 0);
-      const entropyPercent = (entropy / 1.0) * 100; // normalize to 0-100
+      const entropyPercent = (entropy / 1.0) * 100;
 
-      // Combine prediction (weighted)
       let finalPredict, confidence, source;
       const markovWeight = 0.6, patternWeight = 0.4;
       if (bestPattern && bestMarkov) {
@@ -938,7 +1189,7 @@
         confidence = 50;
         source = 'mặc định';
       }
-      if (confidence < 53) { confidence = 53; finalPredict = freqT >= freqX ? 'TÀI' : 'XỈU'; } // avoid deadlock
+      if (confidence < 53) { confidence = 53; finalPredict = freqT >= freqX ? 'TÀI' : 'XỈU'; }
 
       const displayPred = getDisplayPrediction(gt, finalPredict);
       const displayPredClass = displayPred === 'LẺ' || displayPred === 'XỈU' ? (displayPred === 'LẺ' ? 'LẺ' : 'XỈU') : '';
@@ -950,7 +1201,6 @@
       else if (confidence >= 55) advice = `📊 Độ tự tin khá (${confidence.toFixed(1)}%). Nên vào <b>40%</b> vốn.`;
       else advice = `⚠️ Độ tự tin thấp (${confidence.toFixed(1)}%). <b>Không nên</b> vào tiền.`;
 
-      // Hacker console content
       const content = document.getElementById(`toolMain_${gt}`);
       content.innerHTML = `
         <div class="prediction-box ${highConf}">
@@ -1136,217 +1386,23 @@
       content.classList.remove('hidden');
     }
 
-    // ==================== AUTH ====================
-    function openAuthModal(tab) {
-      document.getElementById('authModal').classList.add('active');
-      document.getElementById('loginUsername').value = '';
-      document.getElementById('loginPassword').value = '';
-      document.getElementById('regUsername').value = '';
-      document.getElementById('regPassword').value = '';
-      document.getElementById('regConfirm').value = '';
-      document.getElementById('rememberMe').checked = false;
-      document.getElementById('authMessage').innerText = '';
-      switchAuthTab(tab);
-    }
-    function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
-    function switchAuthTab(tab) {
-      const isLogin = tab === 'login';
-      document.getElementById('tabLogin').classList.toggle('active', isLogin);
-      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
-      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
-      document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
-    }
-    function register() {
-      const u = document.getElementById('regUsername').value.trim();
-      const p = document.getElementById('regPassword').value;
-      const c = document.getElementById('regConfirm').value;
-      if (!u || !p) { document.getElementById('authMessage').innerText = 'Vui lòng điền đầy đủ.'; return; }
-      if (p !== c) { document.getElementById('authMessage').innerText = 'Mật khẩu không khớp.'; return; }
-      const users = getUsers();
-      if (users[u]) { document.getElementById('authMessage').innerText = 'Tên đăng nhập đã tồn tại.'; return; }
-      users[u] = { password: p, balance: 0, subscriptions: [], unactivatedKeys: [], depositHistory: [], purchaseHistory: [] };
-      saveUsers(users);
-      alert('Đăng ký thành công! Mời đăng nhập.');
-      document.getElementById('regUsername').value = '';
-      document.getElementById('regPassword').value = '';
-      document.getElementById('regConfirm').value = '';
-      switchAuthTab('login');
-      document.getElementById('loginUsername').value = u;
-    }
-    function login() {
-      const u = document.getElementById('loginUsername').value.trim();
-      const p = document.getElementById('loginPassword').value;
-      const remember = document.getElementById('rememberMe').checked;
-      if (!u || !p) { document.getElementById('authMessage').innerText = 'Vui lòng nhập đầy đủ.'; return; }
-      const users = getUsers();
-      if (!users[u] || users[u].password !== p) { document.getElementById('authMessage').innerText = 'Sai thông tin.'; return; }
-      setCurrentUser(u);
-      remember ? setRememberedUser(u) : setRememberedUser(null);
-      closeAuthModal();
-      updateUI();
-    }
-    function logout() {
-      if (confirm('Bạn muốn đăng xuất?')) {
-        stopAllTools();
-        setCurrentUser(null);
-        setRememberedUser(null);
-        updateUI();
-        navigateTo('home');
-      }
-    }
-    function autoLogin() {
-      const remembered = getRememberedUser();
-      if (remembered && getUsers()[remembered]) { setCurrentUser(remembered); updateUI(); }
+    function stopAllTools() {
+      Object.keys(toolStates).forEach(gt => {
+        if (toolStates[gt].interval) clearInterval(toolStates[gt].interval);
+        toolStates[gt].running = false;
+        const frame = document.getElementById(`liveFrame_${gt}`);
+        if (frame) frame.src = '';
+        const container = document.getElementById(`toolLiveFrame_${gt}`);
+        if (container) container.classList.add('hidden');
+      });
     }
 
-    // ==================== ADMIN ====================
-    function openAdminLoginModal() {
-      document.getElementById('adminLoginModal').classList.add('active');
-      document.getElementById('adminUsername').value = '';
-      document.getElementById('adminPassword').value = '';
-      document.getElementById('adminLoginMsg').innerText = '';
-    }
-    function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('active'); }
-    function loginAdmin() {
-      if (document.getElementById('adminUsername').value.trim() === 'bolaadmin' && document.getElementById('adminPassword').value === 'Duy15052009') {
-        setAdminLoggedIn(true);
-        closeAdminLoginModal();
-        updateUI();
-        loadPendingList();
-        loadUsersList();
-      } else { document.getElementById('adminLoginMsg').innerText = 'Sai thông tin admin.'; }
-    }
-    function logoutAdmin() { setAdminLoggedIn(false); updateUI(); }
-    function switchAdminTab(tab) {
-      document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
-      document.getElementById('tabUsers').classList.toggle('active', tab === 'users');
-      document.getElementById('adminTabPending').classList.toggle('hidden', tab !== 'pending');
-      document.getElementById('adminTabUsers').classList.toggle('hidden', tab !== 'users');
-      if (tab === 'pending') loadPendingList();
-      if (tab === 'users') loadUsersList();
-    }
-    function loadPendingList() {
-      if (!isAdminLoggedIn()) return;
-      const pending = getPendingDeposits();
-      const list = document.getElementById('pendingList');
-      const items = Object.entries(pending).filter(([, i]) => !i.approved && !i.rejected);
-      if (!items.length) { list.innerHTML = '<li style="padding:8px;color:#94a3b8;">Không có lệnh chờ.</li>'; return; }
-      list.innerHTML = items.map(([code, info]) => `<li style="padding:10px;border-bottom:1px solid #1a2740;display:flex;justify-content:space-between;align-items:center;">${code} - ${info.amount.toLocaleString()}đ (User: ${info.username}) <span><button class="btn-outline" style="padding:4px 12px;font-size:0.75rem;margin-left:6px;" onclick="approveDeposit('${code}')">Duyệt</button><button class="btn-outline" style="padding:4px 12px;font-size:0.75rem;margin-left:4px;border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${code}')">Từ chối</button></span></li>`).join('');
-    }
-    function approveDeposit(code) {
-      if (!isAdminLoggedIn()) return;
-      const pending = getPendingDeposits();
-      if (!pending[code] || pending[code].approved) return;
-      pending[code].approved = true;
-      const uname = pending[code].username;
-      const amt = pending[code].amount;
-      savePendingDeposits(pending);
-      const users = getUsers();
-      const user = users[uname];
-      if (user) {
-        user.balance = (user.balance || 0) + amt;
-        user.depositHistory.push({ code, amount: amt, time: Date.now(), status: 'approved' });
-        users[uname] = user;
-        saveUsers(users);
-      }
-      alert('Đã duyệt ' + code);
-      loadPendingList();
-      if (uname === getCurrentUser()) updateUI();
-    }
-    function rejectDeposit(code) {
-      if (!isAdminLoggedIn()) return;
-      const pending = getPendingDeposits();
-      if (!pending[code]) return;
-      pending[code].rejected = true;
-      savePendingDeposits(pending);
-      alert('Đã từ chối ' + code);
-      loadPendingList();
-    }
-    function loadUsersList() {
-      if (!isAdminLoggedIn()) return;
-      const users = getUsers();
-      const tbody = document.getElementById('usersTableBody');
-      const rows = Object.entries(users).map(([username, data]) => {
-        const active = (data.subscriptions || []).filter(s => s.expiresAt > Date.now()).map(s => `${GAME_TYPES[s.gameType]?.name || s.gameType} (${getPackageName(s.package)})`).join(', ') || 'Không';
-        const unact = (data.unactivatedKeys || []).map(k => `${k.key} (${GAME_TYPES[k.gameType]?.name || k.gameType})`).join(', ') || 'Không';
-        return `<tr><td>${username}</td><td>${(data.balance || 0).toLocaleString()}đ</td><td>${active}</td><td>${unact}</td><td><button class="btn-outline" style="padding:4px 10px;font-size:0.7rem;" onclick="adminDeleteKey('${username}')">Xóa key</button></td></tr>`;
-      }).join('');
-      tbody.innerHTML = rows || '<tr><td colspan="5">Chưa có người chơi nào.</td></tr>';
-    }
-    function adminDeleteKey(username) {
-      const users = getUsers();
-      if (users[username] && users[username].unactivatedKeys.length > 0) {
-        users[username].unactivatedKeys = [];
-        saveUsers(users);
-        alert('Đã xóa key của ' + username);
-        loadUsersList();
-      } else { alert('Không có key để xóa.'); }
-    }
-
-    // ==================== NẠP, KÍCH HOẠT, TK ====================
-    function openDepositModal() { document.getElementById('depositModal').classList.add('active'); document.getElementById('depositInfo').classList.add('hidden'); document.getElementById('depositAmount').value = ''; document.getElementById('depositMsg').innerText = ''; }
-    function closeDepositModal() { document.getElementById('depositModal').classList.remove('active'); }
-    function createDeposit() {
-      const amt = parseInt(document.getElementById('depositAmount').value);
-      if (isNaN(amt) || amt < 50000) return alert('Tối thiểu 50,000đ');
-      const code = 'NAP' + Math.random().toString(36).substr(2, 6).toUpperCase();
-      const pending = getPendingDeposits();
-      pending[code] = { amount: amt, username: getCurrentUser(), created: Date.now(), approved: false, rejected: false };
-      savePendingDeposits(pending);
-      document.getElementById('qrDeposit').src = `https://img.vietqr.io/image/MB-499099999-compact2.png?amount=${amt}&addInfo=${code}&accountName=NGUYEN%20DUC%20DUY&size=300`;
-      document.getElementById('depositCode').innerText = code;
-      document.getElementById('depositAmountDisplay').innerText = amt.toLocaleString() + ' VNĐ';
-      document.getElementById('depositContent').innerText = code;
-      document.getElementById('depositInfo').classList.remove('hidden');
-      document.getElementById('depositMsg').innerText = 'Lệnh nạp đã tạo, chờ admin duyệt.';
-    }
-    function openActivateKeyModal() {
-      document.getElementById('activateKeyModal').classList.add('active');
-      document.getElementById('activateKeyInput').value = '';
-      document.getElementById('activateMsg').innerText = '';
-      const d = getUserData();
-      if (!d) return;
-      const list = document.getElementById('unactivatedKeysList');
-      if (d.unactivatedKeys.length === 0) list.innerHTML = '<li style="color:#94a3b8;">Không có key.</li>';
-      else list.innerHTML = d.unactivatedKeys.map(k => `<li style="padding:4px 0;">🔑 ${k.key} (${getPackageName(k.package)} - ${GAME_TYPES[k.gameType]?.name || k.gameType})</li>`).join('');
-    }
-    function closeActivateKeyModal() { document.getElementById('activateKeyModal').classList.remove('active'); }
-    function activateKey() {
-      const inputKey = document.getElementById('activateKeyInput').value.trim();
-      if (!inputKey) return;
-      const d = getUserData();
-      if (!d) return;
-      const idx = d.unactivatedKeys.findIndex(k => k.key === inputKey);
-      if (idx === -1) { document.getElementById('activateMsg').innerText = 'Key không hợp lệ.'; return; }
-      const ki = d.unactivatedKeys[idx];
-      const now = Date.now();
-      let exp;
-      switch (ki.package) { case '1h': exp = now + 3600000; break; case '1d': exp = now + 86400000; break; case '30d': exp = now + 30 * 86400000; break; case 'forever': exp = now + 1000 * 86400000 * 365 * 10; break; default: exp = now; }
-      d.subscriptions.push({ key: ki.key, package: ki.package, amount: ki.amount, gameType: ki.gameType, activatedAt: now, expiresAt: exp });
-      d.unactivatedKeys.splice(idx, 1);
-      saveUserData(d);
-      updateUI();
-      document.getElementById('activateMsg').innerText = '✅ Kích hoạt thành công! Tool đã sẵn sàng.';
-      setTimeout(closeActivateKeyModal, 1500);
-    }
-    function openAccountModal() {
-      const d = getUserData();
-      if (!d) return;
-      document.getElementById('accountIdDisplay').innerText = getCurrentUser();
-      document.getElementById('accountBalance').innerText = (d.balance || 0).toLocaleString() + 'đ';
-      document.getElementById('depositHistory').innerHTML = d.depositHistory.length === 0 ? '<li style="color:#94a3b8;">Chưa có.</li>' : d.depositHistory.map(h => `<li>🔹 ${h.code} - ${h.amount.toLocaleString()}đ (${h.status || 'approved'})</li>`).join('');
-      document.getElementById('purchaseHistory').innerHTML = d.purchaseHistory.length === 0 ? '<li style="color:#94a3b8;">Chưa có.</li>' : d.purchaseHistory.map(p => `<li>🛍️ ${p.key} (${getPackageName(p.package)} - ${GAME_TYPES[p.gameType]?.name || p.gameType}) - ${p.amount.toLocaleString()}đ</li>`).join('');
-      const active = d.subscriptions.filter(s => s.expiresAt > Date.now());
-      document.getElementById('activeSubscription').innerHTML = active.length === 0 ? '<p style="color:#94a3b8;">Không có gói hoạt động.</p>' : active.map(s => `<p>✅ ${s.key} (${getPackageName(s.package)} - ${GAME_TYPES[s.gameType]?.name || s.gameType}) đến ${new Date(s.expiresAt).toLocaleString()}</p>`).join('');
-      document.getElementById('accountModal').classList.add('active');
-    }
-    function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
-    function copyText(t) { navigator.clipboard.writeText(t).then(() => alert('Đã sao chép!')); }
-
-    window.onload = function() {
-      autoLogin();
+    // ==================== INIT ====================
+    window.onload = async function() {
+      await autoLogin();
       updateUI();
       navigateTo('home');
+      // Đóng modal khi click outside
       ['depositModal','activateKeyModal','accountModal','authModal','adminLoginModal','buyModal'].forEach(id => {
         document.getElementById(id).addEventListener('click', e => { if (e.target === e.currentTarget) document.getElementById(id).classList.remove('active'); });
       });
