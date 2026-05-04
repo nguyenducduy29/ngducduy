@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Tool Tài Xỉu Pro • Auto API Betvip</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'Inter', Roboto, system-ui, -apple-system, sans-serif;
+      background: #070b14;
+      color: #e8ecf2;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      background-image: radial-gradient(ellipse at 50% 0%, #111d33 0%, #070b14 60%);
+      min-height: 100vh;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    header {
+      background: rgba(8, 12, 24, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 200, 40, 0.12);
+      padding: 14px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #f5c842;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      cursor: pointer;
+      text-shadow: 0 0 20px rgba(245, 200, 66, 0.3);
+    }
+    .logo i { font-size: 1.9rem; color: #f0a028; }
+    .nav-links { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    .nav-links a, .nav-links button {
+      color: #b0bdd0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.2s;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+    .nav-links a:hover, .nav-links button:hover { color: #f5c842; background: rgba(255,200,40,0.06); }
+    .nav-links a.active { color: #f5c842; font-weight: 600; background: rgba(255,200,40,0.1); }
+    .btn-primary {
+      background: linear-gradient(135deg, #e89520, #f0c830);
+      border: none;
+      padding: 11px 24px;
+      border-radius: 28px;
+      font-weight: 700;
+      color: #0d0f18;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 0.9rem;
+      letter-spacing: 0.4px;
+      box-shadow: 0 4px 18px rgba(240, 180, 40, 0.25);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(240, 180, 40, 0.45); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #f0c830;
+      color: #f0c830;
+      padding: 8px 18px;
+      border-radius: 28px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+    .btn-outline:hover { background: rgba(240, 200, 48, 0.12); }
+    .badge {
+      background: linear-gradient(135deg, #f0c830, #e89520);
+      color: #0d0f18;
+      padding: 5px 14px;
+      border-radius: 24px;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .user-balance { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+    .page { display: none; padding: 40px 0; animation: fadePage 0.3s ease; }
+    @keyframes fadePage { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .page.active { display: block; }
+    .hero {
+      text-align: center;
+      padding: 90px 0 70px;
+      background: radial-gradient(circle at 50% 30%, rgba(30,45,70,0.6) 0%, transparent 70%);
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #f5c842, #f0a028, #f5c842);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p { font-size: 1.15rem; max-width: 600px; margin: 0 auto 25px; color: #94a3b8; }
+    .highlight {
+      background: rgba(245, 200, 66, 0.1);
+      border: 1px solid rgba(245, 200, 66, 0.3);
+      padding: 7px 20px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 16px;
+      font-weight: 600;
+      color: #f5c842;
+      font-size: 0.9rem;
+    }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 45px; }
+    .feature-card {
+      background: linear-gradient(145deg, #101a2b, #0d1524);
+      border: 1px solid #1a2740;
+      border-radius: 18px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .feature-card:hover { border-color: #f0c830; transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+    .feature-card i { font-size: 2.2rem; color: #f0a028; margin-bottom: 10px; }
+    .feature-card h3 { font-size: 1rem; margin-bottom: 6px; color: #e8ecf2; }
+    .feature-card p { font-size: 0.85rem; color: #8899b4; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 30px; }
+    .price-card {
+      background: linear-gradient(160deg, #111b2e, #0c1324);
+      border: 1px solid #1e3050;
+      border-radius: 20px;
+      padding: 30px 22px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .price-card:hover { border-color: #f0c830; transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .price-card h3 { font-size: 1.1rem; color: #c8d6e5; }
+    .price { font-size: 2.5rem; font-weight: 800; color: #f5c842; margin: 12px 0 6px; }
+    .price-card p { font-size: 0.85rem; color: #8899b4; margin-bottom: 12px; }
+    .tool-container {
+      background: linear-gradient(160deg, #0f1a2c, #0a1220);
+      border-radius: 22px;
+      padding: 30px 24px;
+      border: 1px solid rgba(240, 200, 48, 0.18);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+    }
+    .api-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 22px;
+      background: rgba(10, 16, 28, 0.7);
+      margin-bottom: 18px;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+      border: 1px solid #1a2740;
+    }
+    .api-status .dot { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+    .api-status .dot.error { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+    .control-buttons { display: flex; gap: 14px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+    .btn-play {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: #fff;
+      padding: 14px 36px;
+      border-radius: 30px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+      transition: 0.3s;
+    }
+    .btn-play:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(34, 197, 94, 0.5); }
+    .btn-stop {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: #fff;
+      padding: 14px 36px;
+      border-radius: 30px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+      transition: 0.3s;
+    }
+    .btn-stop:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5); }
+    .prediction-box {
+      background: linear-gradient(145deg, #141f35, #0e1828);
+      border-radius: 18px;
+      padding: 28px 22px;
+      text-align: center;
+      margin: 18px 0;
+      border: 1px solid #1e3050;
+      transition: all 0.3s;
+    }
+    .prediction-box.high-conf { border-color: #f0c830; box-shadow: 0 0 25px rgba(240, 200, 48, 0.15); }
+    .prediction-result {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f5c842, #f0a028);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+    .prediction-result.XỈU, .prediction-result.LẺ {
+      background: linear-gradient(135deg, #f87171, #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .confidence-bar {
+      height: 6px;
+      border-radius: 6px;
+      background: #1e3050;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .confidence-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.5s ease;
+      background: linear-gradient(90deg, #f0c830, #22c55e);
+    }
+    .advice-box {
+      background: rgba(20, 30, 48, 0.8);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin: 14px 0;
+      font-size: 0.95rem;
+      border-left: 3px solid #f0c830;
+    }
+    .live-frame-container {
+      margin-top: 18px;
+      border: 2px solid #f0c830;
+      border-radius: 14px;
+      overflow: hidden;
+      height: 500px;
+      max-height: 65vh;
+      background: #000;
+      transition: all 0.3s;
+    }
+    .live-frame-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 200; }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: linear-gradient(160deg, #111b2e, #0c1426);
+      border: 1px solid rgba(240, 200, 48, 0.3);
+      border-radius: 20px;
+      padding: 28px 24px;
+      max-width: 520px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    @keyframes slideUp { from { transform: translateY(25px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .close-modal { float: right; font-size: 1.4rem; cursor: pointer; color: #b0bdd0; transition: 0.2s; }
+    .close-modal:hover { color: #f5c842; }
+    .input-field {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: #0d1524;
+      border: 1px solid #1e3050;
+      color: #e8ecf2;
+      margin: 9px 0;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.2s;
+    }
+    .input-field:focus { border-color: #f0c830; box-shadow: 0 0 0 3px rgba(240, 200, 48, 0.1); }
+    .bank-info { background: #0d1524; border-radius: 14px; padding: 18px; margin: 14px 0; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; border: 1px solid #1e3050; }
+    .bank-info img { width: 200px; height: 200px; background: #fff; border-radius: 10px; }
+    .copy-btn { background: none; border: 1px solid #f0c830; color: #f0c830; padding: 5px 12px; border-radius: 18px; cursor: pointer; font-size: 0.78rem; transition: 0.2s; }
+    .copy-btn:hover { background: rgba(240, 200, 48, 0.15); }
+    footer { text-align: center; padding: 28px 0; border-top: 1px solid #1a2740; color: #64748b; font-size: 0.85rem; margin-top: 40px; }
+    .hidden { display: none !important; }
+    .tab { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .tab button { background: #141f35; border: none; color: #b0bdd0; padding: 10px 18px; border-radius: 20px; cursor: pointer; flex: 1; text-align: center; font-weight: 500; transition: 0.2s; }
+    .tab button.active { background: linear-gradient(135deg, #e89520, #f0c830); color: #0d0f18; font-weight: 700; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .data-table th, .data-table td { padding: 7px; text-align: center; border-bottom: 1px solid #1a2740; }
+    .data-table th { color: #f5c842; background: #0d1524; }
+    .overflow-auto { max-height: 220px; overflow-y: auto; }
+    .admin-float-btn { position: fixed; bottom: 28px; right: 28px; z-index: 300; background: linear-gradient(135deg, #e89520, #f0c830); color: #0d0f18; padding: 11px 18px; border-radius: 28px; font-weight: 700; cursor: pointer; border: none; box-shadow: 0 4px 18px rgba(240, 180, 40, 0.4); display: none; font-size: 0.9rem; }
+    .admin-float-btn.show { display: block; }
+    .admin-dashboard { display: none; }
+    .admin-dashboard.active { display: block; }
+    .tool-tabs { display: flex; gap: 10px; margin-bottom: 22px; }
+    .tool-tab { flex: 1; padding: 13px; background: #141f35; border: none; color: #b0bdd0; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+    .tool-tab.active { background: linear-gradient(135deg, #e89520, #f0c830); color: #0d0f18; }
+    .markov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 6px; margin-top: 10px; max-height: 280px; overflow-y: auto; }
+    .markov-item { background: #0d1524; border-radius: 10px; padding: 7px 6px; text-align: center; font-size: 0.75rem; border: 1px solid #1a2740; transition: 0.2s; }
+    .markov-item.best { border-color: #f0c830; background: #1a2538; box-shadow: 0 0 10px rgba(240, 200, 48, 0.15); }
+    .markov-item .order { font-weight: 700; color: #f5c842; font-size: 0.8rem; }
+    .pattern-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 2px;
+    }
+    .pattern-tag.found { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+    .pattern-tag.notfound { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; }
+    /* Hacker style addon */
+    .hacker-console {
+      background: #0a0f18;
+      border: 1px solid #00ff88;
+      padding: 16px;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      color: #00ff88;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      box-shadow: 0 0 12px rgba(0,255,136,0.2);
+    }
+    .hacker-console .label { color: #ffaa00; }
+    .hacker-console .value { color: #00ffff; }
+    .hacker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.2rem; }
+      .prediction-result { font-size: 2rem; }
+      .tool-container { padding: 20px 14px; }
+      .live-frame-container { height: 350px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <div class="logo" onclick="navigateTo('home')"><i class="fas fa-dice"></i> Tài Xỉu Pro</div>
+      <div class="nav-links">
+        <a href="#home" onclick="navigateTo('home')" class="active" id="navHome">Trang chủ</a>
+        <a href="#tool" onclick="navigateTo('tool')" id="navTool" class="hidden">Tool</a>
+        <a href="#pricing" onclick="navigateTo('pricing')" id="navPricing">Gói dịch vụ</a>
+        <span id="authArea">
+          <button onclick="openAuthModal('login')"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+          <button onclick="openAuthModal('register')"><i class="fas fa-user-plus"></i> Đăng ký</button>
+        </span>
+        <span id="userArea" class="hidden" style="display:flex;align-items:center;gap:12px;">
+          <span class="user-balance"><i class="fas fa-wallet"></i> <span id="balanceDisplay">0đ</span></span>
+          <span class="badge" id="usernameDisplay"></span>
+          <a href="#" onclick="openDepositModal()" style="color:#f5c842;"><i class="fas fa-plus-circle"></i> Nạp</a>
+          <a href="#" onclick="openActivateKeyModal()" style="color:#f5c842;"><i class="fas fa-key"></i> Kích hoạt</a>
+          <a href="#" onclick="openAccountModal()" style="color:#f5c842;"><i class="fas fa-user-circle"></i> TK</a>
+          <a href="#" onclick="logout()" style="color:#f87171;"><i class="fas fa-sign-out-alt"></i></a>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <div id="pageHome" class="page active">
+    <div class="hero">
+      <div class="container">
+        <div class="highlight"><i class="fas fa-crown"></i> Công cụ số 1 Việt Nam</div>
+        <h1>Chiến thắng Tài Xỉu mỗi ngày</h1>
+        <p>Phân tích AI độc quyền, tự động lấy dữ liệu từ Betvip. Tỉ lệ thắng vượt trội.</p>
+        <a href="#" class="btn-primary" style="font-size:1.1rem;padding:14px 32px;" onclick="navigateTo('pricing')"><i class="fas fa-bolt"></i> Bắt đầu ngay</a>
+      </div>
+    </div>
+    <div class="container">
+      <div class="features">
+        <div class="feature-card"><i class="fas fa-cloud-download-alt"></i><h3>Auto Fetch API</h3><p>Tự động lấy kết quả mới nhất từ Betvip khi Play.</p></div>
+        <div class="feature-card"><i class="fas fa-brain"></i><h3>AI Markov bậc cao</h3><p>Phân tích chuỗi sự kiện với Markov đến bậc 50.</p></div>
+        <div class="feature-card"><i class="fas fa-shield-alt"></i><h3>Bảo mật tuyệt đối</h3><p>Đăng nhập riêng, admin duyệt nạp an toàn.</p></div>
+        <div class="feature-card"><i class="fas fa-chart-pie"></i><h3>Dự đoán chính xác</h3><p>Kết hợp mẫu cầu, Markov, dữ liệu thực tế.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pageTool" class="page">
+    <div class="container">
+      <div id="toolLocked" class="tool-container" style="text-align:center;">
+        <i class="fas fa-lock" style="font-size:3rem;color:#ef4444;"></i>
+        <h3 style="margin:18px 0;">Bạn cần mua gói và kích hoạt để sử dụng Tool</h3>
+        <a href="#" class="btn-primary" onclick="navigateTo('pricing')">Xem gói dịch vụ</a>
+      </div>
+      <div id="toolActive" class="hidden">
+        <div class="tool-container">
+          <h2 style="color:#f5c842;text-align:center;margin-bottom:16px;font-size:1.3rem;"><i class="fas fa-chart-pie"></i> Tool Phân Tích Tài Xỉu VIP</h2>
+          <div id="toolTabs" class="tool-tabs"></div>
+          <div id="toolPanels"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pagePricing" class="page">
+    <div class="container">
+      <h2 class="section-title" style="color:#f5c842;">🔑 Gói dịch vụ</h2>
+      <div class="pricing-grid">
+        <div class="price-card"><h3>Gói 1 Giờ</h3><div class="price">29k</div><p>Dùng tool không giới hạn</p><button class="btn-primary" style="width:100%;" onclick="openBuyModal('1h',29000)">Mua ngay</button></div>
+        <div class="price-card"><h3>Gói 1 Ngày</h3><div class="price">99k</div><p>Truy cập 24h</p><button class="btn-primary" style="width:100%;" onclick="openBuyModal('1d',99000)">Mua ngay</button></div>
+        <div class="price-card"><h3>Gói 1 Tháng</h3><div class="price">299k</div><p>Tiết kiệm nhất</p><button class="btn-primary" style="width:100%;" onclick="openBuyModal('30d',299000)">Mua ngay</button></div>
+        <div class="price-card"><h3>Gói Vĩnh Viễn</h3><div class="price">999k</div><p>Trọn đời</p><button class="btn-primary" style="width:100%;" onclick="openBuyModal('forever',999000)">Mua ngay</button></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="admin-float-btn show" id="adminFloatBtn" onclick="openAdminLoginModal()"><i class="fas fa-user-shield"></i> Admin</button>
+
+  <div id="adminLoginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeAdminLoginModal()">&times;</span>
+      <h2><i class="fas fa-user-shield"></i> Đăng nhập Admin</h2>
+      <input class="input-field" type="text" id="adminUsername" placeholder="Tên admin">
+      <input class="input-field" type="password" id="adminPassword" placeholder="Mật khẩu admin">
+      <button class="btn-primary" style="width:100%;" onclick="loginAdmin()">Đăng nhập</button>
+      <p id="adminLoginMsg" style="margin-top:10px;color:#f0a028;"></p>
+    </div>
+  </div>
+
+  <div id="adminDashboard" class="admin-dashboard">
+    <div class="container" style="padding-top:20px;">
+      <h2 style="color:#f5c842;margin-bottom:18px;"><i class="fas fa-user-shield"></i> Admin Dashboard</h2>
+      <div class="tab">
+        <button id="tabPending" class="active" onclick="switchAdminTab('pending')">Lệnh nạp chờ duyệt</button>
+        <button id="tabUsers" onclick="switchAdminTab('users')">Quản lý người chơi</button>
+      </div>
+      <div id="adminTabPending"><ul id="pendingList" style="list-style:none;padding:0;"></ul><div id="adminMsg" style="margin-top:10px;"></div></div>
+      <div id="adminTabUsers" class="hidden">
+        <div class="overflow-auto"><table class="data-table"><thead><tr><th>Username</th><th>Số dư</th><th>Gói active</th><th>Keys chưa kích hoạt</th><th>Hành động</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+        <div id="userActionMsg" style="margin-top:10px;"></div>
+      </div>
+      <button class="btn-outline" style="margin-top:18px;" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Thoát Admin</button>
+    </div>
+  </div>
+
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+      <div class="tab">
+        <button id="tabLogin" class="active" onclick="switchAuthTab('login')">Đăng nhập</button>
+        <button id="tabRegister" onclick="switchAuthTab('register')">Đăng ký</button>
+      </div>
+      <div id="loginForm">
+        <input class="input-field" type="text" id="loginUsername" placeholder="Tên đăng nhập">
+        <input class="input-field" type="password" id="loginPassword" placeholder="Mật khẩu">
+        <div class="checkbox-container" style="display:flex;align-items:center;gap:8px;margin:8px 0;font-size:0.85rem;">
+          <input type="checkbox" id="rememberMe"> <label for="rememberMe">Ghi nhớ đăng nhập</label>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="login()">Đăng nhập</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <input class="input-field" type="text" id="regUsername" placeholder="Tên đăng nhập">
+        <input class="input-field" type="password" id="regPassword" placeholder="Mật khẩu">
+        <input class="input-field" type="password" id="regConfirm" placeholder="Xác nhận mật khẩu">
+        <button class="btn-primary" style="width:100%;" onclick="register()">Đăng ký</button>
+      </div>
+      <p id="authMessage" style="margin-top:10px;color:#f0a028;"></p>
+    </div>
+  </div>
+
+  <div id="depositModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeDepositModal()">&times;</span>
+      <h2><i class="fas fa-coins"></i> Nạp tiền</h2>
+      <p style="font-size:0.9rem;color:#94a3b8;">Nhập số tiền (tối thiểu 50,000đ) – Admin duyệt sau khi CK.</p>
+      <input class="input-field" type="number" id="depositAmount" placeholder="VD: 100000" min="50000">
+      <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="createDeposit()">Tạo lệnh nạp</button>
+      <div id="depositInfo" class="hidden" style="margin-top:18px;">
+        <p><strong>Mã nạp:</strong> <span id="depositCode" style="color:#f5c842;"></span> <button class="copy-btn" onclick="copyText(document.getElementById('depositCode').innerText)">Copy</button></p>
+        <div class="bank-info">
+          <img id="qrDeposit" src="" alt="QR">
+          <div>
+            <p><strong>MBBANK: 499099999</strong></p>
+            <p><strong>Chủ TK:</strong> NGUYEN DUC DUY</p>
+            <p><strong>Số tiền:</strong> <span id="depositAmountDisplay"></span></p>
+            <p style="font-size:0.8rem;">Nội dung CK: <strong id="depositContent"></strong></p>
+          </div>
+        </div>
+        <p style="color:#f0a028;font-size:0.9rem;">Chuyển khoản đúng nội dung, sau đó chờ admin duyệt.</p>
+        <p id="depositMsg" style="margin-top:8px;color:#22c55e;"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="activateKeyModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeActivateKeyModal()">&times;</span>
+      <h2><i class="fas fa-key"></i> Kích hoạt Key</h2>
+      <p style="font-size:0.9rem;color:#94a3b8;">Nhập key đã mua.</p>
+      <input class="input-field" type="text" id="activateKeyInput" placeholder="TXKEY-...">
+      <button class="btn-primary" style="width:100%;" onclick="activateKey()">Kích hoạt</button>
+      <p id="activateMsg" style="margin-top:10px;"></p>
+      <div style="margin-top:14px;font-size:0.85rem;">
+        <p style="color:#f5c842;">Key chưa dùng:</p>
+        <ul id="unactivatedKeysList" style="list-style:none;padding:0;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="accountModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeAccountModal()">&times;</span>
+      <h2><i class="fas fa-user-circle"></i> Tài khoản</h2>
+      <p>ID: <strong id="accountIdDisplay"></strong> | Số dư: <strong id="accountBalance" style="color:#f5c842;"></strong></p>
+      <h3 style="margin-top:14px;color:#f5c842;">📜 Lịch sử nạp</h3>
+      <ul id="depositHistory" style="list-style:none;padding:0;font-size:0.85rem;"></ul>
+      <h3 style="color:#f5c842;">🛒 Lịch sử mua key</h3>
+      <ul id="purchaseHistory" style="list-style:none;padding:0;font-size:0.85rem;"></ul>
+      <h3 style="color:#f5c842;">🔑 Gói đang hoạt động</h3>
+      <div id="activeSubscription" style="font-size:0.85rem;"></div>
+    </div>
+  </div>
+
+  <div id="buyModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeBuyModal()">&times;</span>
+      <h2>🛒 Mua Key Tool</h2>
+      <p id="buyPackageInfo"></p>
+      <p><strong>Chọn bàn chơi:</strong></p>
+      <select id="buyGameType" class="input-field">
+        <option value="nohu">🎰 Tài Xỉu Nổ Hũ</option>
+        <option value="md5">🔮 Tài Xỉu MD5</option>
+        <option value="chanle">🎲 Xóc Đĩa MD5 (mới)</option>
+      </select>
+      <button class="btn-primary" style="width:100%;" onclick="confirmBuyPackage()">Xác nhận mua</button>
+      <p id="buyMsg" style="margin-top:10px;"></p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">© 2026 Tài Xỉu Tool Pro. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // ==================== DATABASE ====================
+    const STORAGE_USERS = 'tx_users_v8';
+    const STORAGE_CURRENT = 'tx_current_user';
+    const STORAGE_REMEMBER = 'tx_remember_user';
+    const STORAGE_PENDING = 'tx_pending_deposits';
+    const STORAGE_ADMIN = 'tx_admin_logged';
+    const API_NOHU = 'https://wtx.macminim6.online/v1/tx/lite-sessions?cp=R&cl=R&pf=web&at=a73569fe41bbc7f8f6a2c1796b75a90f';
+    const API_MD5 = 'https://wtxmd52.macminim6.online/v1/txmd5/lite-sessions?cp=R&cl=R&pf=web&at=a73569fe41bbc7f8f6a2c1796b75a90f';
+    const API_CHANLE = 'https://wcl.macminim6.online/v1/chanlefull/lite-sessions?cp=R&cl=R&pf=web&at=15f51cf639573b0b2823dc9eaca9960e';
+    const BETVIP_URL = 'https://play.betvip.fit';
+
+    function getUsers() { try { return JSON.parse(localStorage.getItem(STORAGE_USERS) || '{}'); } catch(e) { return {}; } }
+    function saveUsers(u) { localStorage.setItem(STORAGE_USERS, JSON.stringify(u)); }
+    function getCurrentUser() { return localStorage.getItem(STORAGE_CURRENT); }
+    function setCurrentUser(u) { localStorage.setItem(STORAGE_CURRENT, u||''); }
+    function getRememberedUser() { return localStorage.getItem(STORAGE_REMEMBER); }
+    function setRememberedUser(u) { u ? localStorage.setItem(STORAGE_REMEMBER, u) : localStorage.removeItem(STORAGE_REMEMBER); }
+    function isAdminLoggedIn() { return sessionStorage.getItem(STORAGE_ADMIN) === 'true'; }
+    function setAdminLoggedIn(v) { v ? sessionStorage.setItem(STORAGE_ADMIN,'true') : sessionStorage.removeItem(STORAGE_ADMIN); }
+    function getUserData() { const u = getUsers(); const n = getCurrentUser(); return n && u[n] ? u[n] : null; }
+    function saveUserData(d) { const u = getUsers(); const n = getCurrentUser(); if (n) { u[n] = d; saveUsers(u); } }
+    function getPendingDeposits() { try { return JSON.parse(localStorage.getItem(STORAGE_PENDING) || '{}'); } catch(e) { return {}; } }
+    function savePendingDeposits(d) { localStorage.setItem(STORAGE_PENDING, JSON.stringify(d)); }
+
+    const GAME_TYPES = {
+      nohu: { name: 'Tài Xỉu Nổ Hũ', api: API_NOHU, icon: '🎰' },
+      md5: { name: 'Tài Xỉu MD5', api: API_MD5, icon: '🔮' },
+      chanle: { name: 'Xóc Đĩa MD5', api: API_CHANLE, icon: '🎲', labels: { win: 'CHẴN', lose: 'LẺ' } }
+    };
+
+    function getDisplayPrediction(gt, pred) {
+      if (gt === 'chanle') {
+        return pred === 'TÀI' ? 'CHẴN' : (pred === 'XỈU' ? 'LẺ' : pred);
+      }
+      return pred;
+    }
+
+    function getActiveSubscriptions() {
+      const d = getUserData();
+      return d && d.subscriptions ? d.subscriptions.filter(s => s.expiresAt > Date.now()) : [];
+    }
+    function hasActiveSubscriptionFor(gt) { return getActiveSubscriptions().some(s => s.gameType === gt); }
+    function canBuyPackageForGame(gt) { return !hasActiveSubscriptionFor(gt); }
+
+    let currentBuyPackage = null;
+    function openBuyModal(pkg, amt) {
+      const d = getUserData();
+      if (!d) { alert('Vui lòng đăng nhập'); return; }
+      if (d.balance < amt) { alert('Số dư không đủ.'); return; }
+      currentBuyPackage = { package: pkg, amount: amt };
+      document.getElementById('buyPackageInfo').innerText = `Gói ${getPackageName(pkg)} - Giá ${amt.toLocaleString()}đ`;
+      document.getElementById('buyGameType').value = 'nohu';
+      document.getElementById('buyMsg').innerText = '';
+      document.getElementById('buyModal').classList.add('active');
+    }
+    function closeBuyModal() { document.getElementById('buyModal').classList.remove('active'); currentBuyPackage = null; }
+    function confirmBuyPackage() {
+      if (!currentBuyPackage) return;
+      const gt = document.getElementById('buyGameType').value;
+      if (!canBuyPackageForGame(gt)) { document.getElementById('buyMsg').innerText = 'Bạn đã có key đang hoạt động cho bàn này. Hãy đợi hết hạn.'; return; }
+      const d = getUserData();
+      if (!d) return;
+      const { package: pkg, amount: amt } = currentBuyPackage;
+      if (d.balance < amt) { alert('Số dư không đủ.'); return; }
+      d.balance -= amt;
+      const key = 'TXKEY-' + Math.random().toString(36).substr(2,8).toUpperCase();
+      d.unactivatedKeys.push({ key, package: pkg, amount: amt, gameType: gt, createdAt: Date.now() });
+      d.purchaseHistory.push({ key, package: pkg, amount: amt, gameType: gt, time: Date.now() });
+      saveUserData(d); updateUI();
+      alert(`Đã mua key: ${key} cho bàn ${GAME_TYPES[gt]?.name || gt}. Vào Kích hoạt để dùng.`);
+      closeBuyModal();
+    }
+    function getPackageName(t) {
+      const m = { '1h':'1 Giờ', '1d':'1 Ngày', '30d':'1 Tháng', 'forever':'Vĩnh Viễn' };
+      return m[t] || t;
+    }
+
+    function navigateTo(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      ['pageHome','pageTool','pagePricing'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      if (page === 'home') { document.getElementById('pageHome').classList.add('active'); document.getElementById('pageHome').classList.remove('hidden'); }
+      else if (page === 'tool') { document.getElementById('pageTool').classList.add('active'); document.getElementById('pageTool').classList.remove('hidden'); updateToolVisibility(); }
+      else if (page === 'pricing') { document.getElementById('pagePricing').classList.add('active'); document.getElementById('pagePricing').classList.remove('hidden'); }
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      if (page === 'home') document.getElementById('navHome').classList.add('active');
+      else if (page === 'tool') document.getElementById('navTool').classList.add('active');
+      else if (page === 'pricing') document.getElementById('navPricing').classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    function updateUI() {
+      const user = getCurrentUser();
+      const authArea = document.getElementById('authArea');
+      const userArea = document.getElementById('userArea');
+      if (user) {
+        authArea.classList.add('hidden');
+        userArea.classList.remove('hidden');
+        const d = getUserData();
+        if (d) {
+          document.getElementById('usernameDisplay').innerText = user;
+          document.getElementById('balanceDisplay').innerText = (d.balance || 0).toLocaleString() + 'đ';
+          document.getElementById('navTool').classList.toggle('hidden', getActiveSubscriptions().length === 0);
+        }
+      } else {
+        authArea.classList.remove('hidden');
+        userArea.classList.add('hidden');
+        document.getElementById('navTool').classList.add('hidden');
+      }
+      updateToolVisibility();
+      document.getElementById('adminFloatBtn').classList.toggle('show', !isAdminLoggedIn());
+      document.getElementById('adminDashboard').classList.toggle('active', isAdminLoggedIn());
+    }
+
+    function updateToolVisibility() {
+      const active = getActiveSubscriptions();
+      const hasAny = active.length > 0;
+      document.getElementById('toolLocked').classList.toggle('hidden', hasAny);
+      document.getElementById('toolActive').classList.toggle('hidden', !hasAny);
+      if (hasAny) renderToolTabs(active);
+      else stopAllTools();
+    }
+
+    const toolStates = {
+      nohu: { running: false, interval: null, lastData: null, seqTX: [] },
+      md5: { running: false, interval: null, lastData: null, seqTX: [] },
+      chanle: { running: false, interval: null, lastData: null, seqTX: [] }
+    };
+
+    function stopAllTools() {
+      Object.keys(toolStates).forEach(gt => {
+        if (toolStates[gt].interval) clearInterval(toolStates[gt].interval);
+        toolStates[gt].running = false;
+        toolStates[gt].interval = null;
+        const frame = document.getElementById(`liveFrame_${gt}`);
+        if (frame) frame.src = '';
+        const container = document.getElementById(`toolLiveFrame_${gt}`);
+        if (container) container.classList.add('hidden');
+      });
+    }
+
+    function renderToolTabs(activeSubs) {
+      const tabsC = document.getElementById('toolTabs');
+      const panelsC = document.getElementById('toolPanels');
+      const unique = [...new Set(activeSubs.map(s => s.gameType))];
+      if (!unique.length) { tabsC.innerHTML = ''; panelsC.innerHTML = ''; return; }
+      let tH = '', pH = '';
+      unique.forEach((gt, i) => {
+        const inf = GAME_TYPES[gt] || { name: gt, icon: '🎲' };
+        tH += `<button class="tool-tab ${i===0?'active':''}" onclick="switchToolTab('${gt}')">${inf.icon} ${inf.name}</button>`;
+        pH += `<div id="toolPanel_${gt}" class="tool-panel ${i===0?'':'hidden'}"></div>`;
+      });
+      tabsC.innerHTML = tH;
+      panelsC.innerHTML = pH;
+      unique.forEach((gt, i) => { if (i === 0) buildToolPanel(gt); });
+    }
+
+    function switchToolTab(gt) {
+      document.querySelectorAll('.tool-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tool-panel').forEach(p => p.classList.add('hidden'));
+      const btn = Array.from(document.querySelectorAll('.tool-tab')).find(b => b.innerText.includes(GAME_TYPES[gt]?.name));
+      if (btn) btn.classList.add('active');
+      const panel = document.getElementById(`toolPanel_${gt}`);
+      if (panel) {
+        panel.classList.remove('hidden');
+        if (!panel.dataset.init) { buildToolPanel(gt); panel.dataset.init = '1'; }
+      }
+    }
+
+    function buildToolPanel(gt) {
+      const panel = document.getElementById(`toolPanel_${gt}`);
+      if (!panel) return;
+      panel.innerHTML = `
+        <div id="toolActiveArea_${gt}" class="hidden">
+          <div class="api-status">
+            <span>API ${GAME_TYPES[gt].name}:</span>
+            <span class="dot" id="apiDot_${gt}"></span>
+            <span id="apiStatusText_${gt}" style="font-size:0.82rem;">Chưa kết nối</span>
+            <span style="margin-left:auto;font-size:0.72rem;color:#64748b;">Cập nhật mỗi 5s</span>
+          </div>
+          <div id="toolMain_${gt}" class="hidden"></div>
+          <div id="toolLiveFrame_${gt}" class="live-frame-container hidden">
+            <iframe id="liveFrame_${gt}" src="" allow="autoplay; encrypted-media" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"></iframe>
+          </div>
+        </div>
+        <div class="control-buttons">
+          <button class="btn-play" id="btnPlay_${gt}" onclick="startTool('${gt}')"><i class="fas fa-play"></i> Play Tool</button>
+          <button class="btn-stop hidden" id="btnStop_${gt}" onclick="stopTool('${gt}')"><i class="fas fa-stop"></i> Stop Tool</button>
+        </div>
+      `;
+    }
+
+    async function fetchData(gt) {
+      const apiUrl = GAME_TYPES[gt]?.api;
+      const statusEl = document.getElementById(`apiStatusText_${gt}`);
+      const dotEl = document.getElementById(`apiDot_${gt}`);
+      if (statusEl) statusEl.innerText = 'Đang tải...';
+      if (dotEl) dotEl.className = 'dot';
+      try {
+        const resp = await fetch(apiUrl);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const json = await resp.json();
+        if (statusEl) statusEl.innerText = 'Đã kết nối (' + json.list.length + ' phiên)';
+        if (dotEl) dotEl.className = 'dot';
+        const txSeq = json.list.map(item => {
+          const raw = item.resultTruyenThong;
+          if (gt === 'chanle') {
+            return raw === 'CHAN' ? 'T' : 'X';
+          }
+          return raw === 'TAI' ? 'T' : 'X';
+        }).reverse();
+        toolStates[gt].lastData = json;
+        toolStates[gt].seqTX = txSeq;
+        return txSeq;
+      } catch (err) {
+        if (statusEl) statusEl.innerText = 'Lỗi: ' + err.message;
+        if (dotEl) dotEl.className = 'dot error';
+        return null;
+      }
+    }
+
+    // ==================== PATTERN DETECTION ENGINE (chung) ====================
+    function detectAllPatterns(seqTX) {
+      const total = seqTX.length;
+      const results = [];
+
+      function checkRepeat(patternStr, minReps = 2) {
+        const len = patternStr.length;
+        if (total < len * (minReps + 1)) return null;
+        const lastPattern = seqTX.slice(-len).join('');
+        if (lastPattern !== patternStr) return null;
+        let reps = 0;
+        let pos = total - len;
+        while (pos >= len && seqTX.slice(pos - len, pos).join('') === patternStr) { reps++; pos -= len; }
+        if (reps >= minReps) {
+          const nextPred = patternStr[0] === 'T' ? 'TÀI' : 'XỈU';
+          const conf = Math.min(94, 50 + reps * 12 + len * 3);
+          return { prediction: nextPred, confidence: conf, reps, patternStr, len };
+        }
+        return null;
+      }
+
+      function checkStreak(side, minLen = 3) {
+        const ch = side === 'TÀI' ? 'T' : 'X';
+        let count = 0;
+        for (let i = total - 1; i >= 0 && seqTX[i] === ch; i--) count++;
+        if (count >= minLen) {
+          const conf = Math.min(92, 50 + count * 10);
+          return { prediction: side, confidence: conf, streak: count, type: 'bệt' };
+        }
+        return null;
+      }
+
+      function checkAlternating(len = 1, minReps = 3) {
+        const pattern = len === 1 ? 'TX' : (len === 2 ? 'TTXX' : 'TTTXXX');
+        const fullLen = pattern.length;
+        if (total < fullLen * minReps) return null;
+        let reps = 0, pos = total;
+        while (pos >= fullLen && seqTX.slice(pos - fullLen, pos).join('') === pattern) { reps++; pos -= fullLen; }
+        if (reps >= minReps) {
+          const nextPred = pattern[0] === 'T' ? 'TÀI' : 'XỈU';
+          const conf = Math.min(88, 55 + reps * 9);
+          return { prediction: nextPred, confidence: conf, reps, type: `cầu ${len}-${len}` };
+        }
+        return null;
+      }
+
+      function checkAsymmetric(a, b, minReps = 2) {
+        const pattern = 'T'.repeat(a) + 'X'.repeat(b);
+        const altPattern = 'X'.repeat(a) + 'T'.repeat(b);
+        const fullLen = pattern.length;
+        if (total < fullLen * (minReps + 1)) return null;
+        let repsP = 0, pos = total;
+        while (pos >= fullLen && seqTX.slice(pos - fullLen, pos).join('') === pattern) { repsP++; pos -= fullLen; }
+        let repsA = 0; pos = total;
+        while (pos >= fullLen && seqTX.slice(pos - fullLen, pos).join('') === altPattern) { repsA++; pos -= fullLen; }
+        const bestReps = Math.max(repsP, repsA);
+        const bestPattern = repsP >= repsA ? pattern : altPattern;
+        if (bestReps >= minReps) {
+          const nextPred = bestPattern[0] === 'T' ? 'TÀI' : 'XỈU';
+          const conf = Math.min(89, 50 + bestReps * 11 + a + b);
+          return { prediction: nextPred, confidence: conf, reps: bestReps, type: `cầu ${a}-${b}` };
+        }
+        return null;
+      }
+
+      function checkThreePhase(a, b, c, minReps = 2) {
+        const p1 = 'T'.repeat(a) + 'X'.repeat(b) + 'T'.repeat(c);
+        const p2 = 'X'.repeat(a) + 'T'.repeat(b) + 'X'.repeat(c);
+        const fullLen = p1.length;
+        if (total < fullLen * (minReps + 1)) return null;
+        let r1 = 0, pos = total;
+        while (pos >= fullLen && seqTX.slice(pos - fullLen, pos).join('') === p1) { r1++; pos -= fullLen; }
+        let r2 = 0; pos = total;
+        while (pos >= fullLen && seqTX.slice(pos - fullLen, pos).join('') === p2) { r2++; pos -= fullLen; }
+        const best = Math.max(r1, r2);
+        const bestP = r1 >= r2 ? p1 : p2;
+        if (best >= minReps) {
+          return { prediction: bestP[0] === 'T' ? 'TÀI' : 'XỈU', confidence: Math.min(87, 50 + best * 13), reps: best, type: `cầu ${a}-${b}-${c}` };
+        }
+        return null;
+      }
+
+      for (let s = 7; s >= 3; s--) { const r = checkStreak('TÀI', s); if (r) results.push(r); const r2 = checkStreak('XỈU', s); if (r2) results.push(r2); if (results.length >= 2) break; }
+      for (let len of [1, 2, 3]) { const r = checkAlternating(len, len === 1 ? 4 : 2); if (r) results.push(r); }
+      const asymPairs = [[2,1],[1,2],[3,1],[1,3],[3,2],[2,3],[4,1],[1,4],[4,2],[2,4],[4,3],[3,4],[5,1],[1,5],[5,2],[2,5],[5,3],[3,5],[5,4],[4,5]];
+      for (const [a,b] of asymPairs) { const r = checkAsymmetric(a, b, 2); if (r) { results.push(r); break; } }
+      const threePhasePatterns = [[1,1,2],[2,1,1],[1,2,1],[2,2,1],[1,2,2],[2,1,2],[3,1,1],[1,1,3],[3,2,1],[1,2,3]];
+      for (const [a,b,c] of threePhasePatterns) { const r = checkThreePhase(a, b, c, 2); if (r) { results.push(r); break; } }
+      for (let len = 1; len <= 6; len++) {
+        if (total >= len * 4) {
+          const lastP = seqTX.slice(-len).join('');
+          const r = checkRepeat(lastP, 3);
+          if (r) results.push(r);
+        }
+      }
+      const recentN = Math.min(20, total);
+      const recent = seqTX.slice(-recentN);
+      const tCount = recent.filter(v => v === 'T').length;
+      const xCount = recent.length - tCount;
+      const dominantSide = tCount >= xCount ? 'TÀI' : 'XỈU';
+      const dominantPct = Math.round((Math.max(tCount, xCount) / recent.length) * 100);
+      if (dominantPct >= 60) {
+        results.push({ prediction: dominantSide, confidence: Math.min(75, 40 + dominantPct * 0.5), type: `xu hướng ${dominantSide} (${dominantPct}%)`, isStats: true });
+      }
+      results.sort((a, b) => b.confidence - a.confidence);
+      return results;
+    }
+
+    // ==================== HACKER‑GRADE CHAN LE ENGINE ====================
+    function runChanleTool(gt) {
+      if (!toolStates[gt].running) return;
+      const seqTX = toolStates[gt].seqTX;
+      if (!seqTX || seqTX.length < 5) return;
+      const total = seqTX.length;
+
+      // Markov up to order 8
+      const allMarkov = [];
+      const maxMarkovOrder = Math.min(8, total - 2);
+      for (let order = 1; order <= maxMarkovOrder; order++) {
+        const trans = {};
+        for (let i = 0; i < total - order; i++) {
+          const from = seqTX.slice(i, i + order).join('');
+          const to = seqTX[i + order];
+          if (!trans[from]) trans[from] = { T: 0, X: 0 };
+          trans[from][to]++;
+        }
+        const lastState = seqTX.slice(total - order).join('');
+        const probs = trans[lastState] || { T: 0, X: 0 };
+        const sum = (probs.T + probs.X) || 1;
+        const Tp = (probs.T / sum) * 100;
+        const Xp = (probs.X / sum) * 100;
+        allMarkov.push({ order, predict: probs.T >= probs.X ? 'TÀI' : 'XỈU', T: Tp, X: Xp, confidence: Math.max(Tp, Xp), count: sum });
+      }
+      allMarkov.sort((a, b) => b.confidence - a.confidence || b.order - a.order);
+      const bestMarkov = allMarkov[0] || { predict: 'TÀI', confidence: 50, order: 1, T: 50, X: 50 };
+
+      // Pattern detection with enhanced labels
+      const allPatterns = detectAllPatterns(seqTX);
+      const bestPattern = allPatterns.length > 0 ? allPatterns[0] : null;
+
+      // Entropy indicator
+      const freqT = seqTX.filter(c => c === 'T').length;
+      const freqX = total - freqT;
+      const pT = freqT / total;
+      const pX = freqX / total;
+      const entropy = -(pT > 0 ? pT * Math.log2(pT) : 0) - (pX > 0 ? pX * Math.log2(pX) : 0);
+      const entropyPercent = (entropy / 1.0) * 100; // normalize to 0-100
+
+      // Combine prediction (weighted)
+      let finalPredict, confidence, source;
+      const markovWeight = 0.6, patternWeight = 0.4;
+      if (bestPattern && bestMarkov) {
+        const markovScore = bestMarkov.confidence * (bestMarkov.predict === 'TÀI' ? 1 : -1);
+        const patternScore = bestPattern.confidence * (bestPattern.prediction === 'TÀI' ? 1 : -1);
+        const combinedScore = markovWeight * markovScore + patternWeight * patternScore;
+        finalPredict = combinedScore >= 0 ? 'TÀI' : 'XỈU';
+        confidence = Math.min(95, (Math.abs(combinedScore) * 0.8 + 20));
+        source = 'Ensemble (Markov + Pattern)';
+      } else if (bestPattern) {
+        finalPredict = bestPattern.prediction;
+        confidence = bestPattern.confidence;
+        source = bestPattern.type || 'mẫu cầu';
+      } else if (bestMarkov) {
+        finalPredict = bestMarkov.predict;
+        confidence = bestMarkov.confidence;
+        source = `Markov bậc ${bestMarkov.order}`;
+      } else {
+        finalPredict = 'TÀI';
+        confidence = 50;
+        source = 'mặc định';
+      }
+      if (confidence < 53) { confidence = 53; finalPredict = freqT >= freqX ? 'TÀI' : 'XỈU'; } // avoid deadlock
+
+      const displayPred = getDisplayPrediction(gt, finalPredict);
+      const displayPredClass = displayPred === 'LẺ' || displayPred === 'XỈU' ? (displayPred === 'LẺ' ? 'LẺ' : 'XỈU') : '';
+      const highConf = confidence >= 80 ? 'high-conf' : '';
+
+      let advice = '';
+      if (confidence >= 85) advice = `🎯 Độ tự tin rất cao (${confidence.toFixed(1)}%). Nên vào <b>80%</b> vốn.`;
+      else if (confidence >= 70) advice = `📈 Độ tự tin cao (${confidence.toFixed(1)}%). Nên vào <b>60%</b> vốn.`;
+      else if (confidence >= 55) advice = `📊 Độ tự tin khá (${confidence.toFixed(1)}%). Nên vào <b>40%</b> vốn.`;
+      else advice = `⚠️ Độ tự tin thấp (${confidence.toFixed(1)}%). <b>Không nên</b> vào tiền.`;
+
+      // Hacker console content
+      const content = document.getElementById(`toolMain_${gt}`);
+      content.innerHTML = `
+        <div class="prediction-box ${highConf}">
+          <div class="prediction-result ${displayPredClass}">${displayPred}</div>
+          <div style="margin-top:6px;font-size:0.9rem;color:#94a3b8;">Nguồn: ${source} · Độ tự tin: ${confidence.toFixed(1)}%</div>
+          <div class="confidence-bar"><div class="confidence-fill" style="width:${confidence}%;${confidence<55?'background:#ef4444;':confidence<70?'background:#f0a028;':''}"></div></div>
+        </div>
+        <div class="advice-box">💡 ${advice}</div>
+        <div class="hacker-console">
+          <div class="hacker-grid">
+            <div><span class="label">[ENTROPY]</span> <span class="value">${entropy.toFixed(3)} (${entropyPercent.toFixed(0)}%)</span></div>
+            <div><span class="label">[CHẴN %]</span> <span class="value">${(pT*100).toFixed(1)}%</span></div>
+            <div><span class="label">[LẺ %]</span> <span class="value">${(pX*100).toFixed(1)}%</span></div>
+            <div><span class="label">[MARKOV]</span> <span class="value">Bậc ${bestMarkov.order} (${bestMarkov.T.toFixed(0)}/${bestMarkov.X.toFixed(0)})</span></div>
+          </div>
+          <div style="margin-top:8px;"><span class="label">[PATTERN]</span> <span class="value">${bestPattern ? bestPattern.type || 'mẫu' : 'Không rõ'}</span></div>
+        </div>
+        <div style="margin-top:12px;font-size:0.82rem;">
+          <strong style="color:#f5c842;">📊 Markov đầy đủ (${allMarkov.length} bậc):</strong>
+          <div class="markov-grid">
+            ${allMarkov.map(m => {
+              const bestClass = m.order === bestMarkov.order ? 'best' : '';
+              return `<div class="markov-item ${bestClass}">
+                <span class="order">B${m.order}</span>
+                <div style="color:#22c55e;">C ${m.T.toFixed(0)}%</div>
+                <div style="color:#f87171;">L ${m.X.toFixed(0)}%</div>
+                <div style="font-size:0.65rem;">${getDisplayPrediction(gt, m.predict)}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+      content.classList.remove('hidden');
+    }
+
+    async function startTool(gt) {
+      if (!getCurrentUser()) { alert('Vui lòng đăng nhập'); return; }
+      if (!hasActiveSubscriptionFor(gt)) { alert('Bạn không có key hoạt động cho bàn này.'); return; }
+      toolStates[gt].running = true;
+      document.getElementById(`toolActiveArea_${gt}`).classList.remove('hidden');
+      document.getElementById(`toolMain_${gt}`).classList.remove('hidden');
+      document.getElementById(`btnPlay_${gt}`).classList.add('hidden');
+      document.getElementById(`btnStop_${gt}`).classList.remove('hidden');
+
+      const frameContainer = document.getElementById(`toolLiveFrame_${gt}`);
+      const frame = document.getElementById(`liveFrame_${gt}`);
+      if (frameContainer && frame) {
+        frame.src = BETVIP_URL;
+        frameContainer.classList.remove('hidden');
+      }
+
+      const txSeq = await fetchData(gt);
+      if (txSeq && txSeq.length >= 5) {
+        if (gt === 'chanle') {
+          runChanleTool(gt);
+        } else {
+          runLiveTool(gt);
+        }
+      } else { alert('Không đủ dữ liệu (cần ≥5 phiên).'); }
+      if (toolStates[gt].interval) clearInterval(toolStates[gt].interval);
+      toolStates[gt].interval = setInterval(async () => {
+        if (toolStates[gt].running) {
+          const tx = await fetchData(gt);
+          if (tx && tx.length >= 5) {
+            if (gt === 'chanle') {
+              runChanleTool(gt);
+            } else {
+              runLiveTool(gt);
+            }
+          }
+        }
+      }, 5000);
+    }
+
+    function stopTool(gt) {
+      toolStates[gt].running = false;
+      document.getElementById(`toolActiveArea_${gt}`).classList.add('hidden');
+      document.getElementById(`toolMain_${gt}`).classList.add('hidden');
+      document.getElementById(`btnPlay_${gt}`).classList.remove('hidden');
+      document.getElementById(`btnStop_${gt}`).classList.add('hidden');
+      if (toolStates[gt].interval) { clearInterval(toolStates[gt].interval); toolStates[gt].interval = null; }
+
+      const frame = document.getElementById(`liveFrame_${gt}`);
+      if (frame) frame.src = '';
+      const container = document.getElementById(`toolLiveFrame_${gt}`);
+      if (container) container.classList.add('hidden');
+    }
+
+    function runLiveTool(gt) {
+      if (!toolStates[gt].running) return;
+      const seqTX = toolStates[gt].seqTX;
+      if (!seqTX || seqTX.length < 5) return;
+      const total = seqTX.length;
+
+      const maxOrder = Math.min(50, total - 1);
+      const allMarkov = [];
+      for (let order = 1; order <= maxOrder; order++) {
+        const trans = {};
+        for (let i = 0; i < total - order; i++) {
+          const from = seqTX.slice(i, i + order).join('');
+          const to = seqTX[i + order];
+          if (!trans[from]) trans[from] = { T: 0, X: 0 };
+          trans[from][to]++;
+        }
+        const lastState = seqTX.slice(total - order).join('');
+        const probs = trans[lastState] || { T: 0, X: 0 };
+        const sum = (probs.T + probs.X) || 1;
+        const Tp = (probs.T / sum) * 100;
+        const Xp = (probs.X / sum) * 100;
+        allMarkov.push({ order, predict: probs.T >= probs.X ? 'TÀI' : 'XỈU', T: Tp, X: Xp, confidence: Math.max(Tp, Xp), count: sum });
+      }
+      allMarkov.sort((a, b) => b.confidence - a.confidence || b.order - a.order);
+      const bestMarkov = allMarkov[0];
+
+      const allPatterns = detectAllPatterns(seqTX);
+      const bestPattern = allPatterns.length > 0 ? allPatterns[0] : null;
+
+      let finalPredict, confidence, source;
+      if (bestPattern && bestPattern.confidence >= (bestMarkov?.confidence || 50)) {
+        finalPredict = bestPattern.prediction;
+        confidence = bestPattern.confidence;
+        source = bestPattern.type || 'mẫu cầu';
+      } else if (bestMarkov) {
+        finalPredict = bestMarkov.predict;
+        confidence = bestMarkov.confidence;
+        source = `Markov bậc ${bestMarkov.order}`;
+      } else {
+        finalPredict = 'TÀI';
+        confidence = 50;
+        source = 'mặc định';
+      }
+
+      const displayPred = getDisplayPrediction(gt, finalPredict);
+      const displayPredClass = displayPred === 'LẺ' || displayPred === 'XỈU' ? (displayPred === 'LẺ' ? 'LẺ' : 'XỈU') : '';
+
+      let advice = '';
+      if (confidence >= 85) advice = `🎯 Độ tự tin rất cao (${confidence.toFixed(1)}%). Nên vào <b>80%</b> vốn.`;
+      else if (confidence >= 70) advice = `📈 Độ tự tin cao (${confidence.toFixed(1)}%). Nên vào <b>60%</b> vốn.`;
+      else if (confidence >= 55) advice = `📊 Độ tự tin khá (${confidence.toFixed(1)}%). Nên vào <b>40%</b> vốn.`;
+      else advice = `⚠️ Độ tự tin thấp (${confidence.toFixed(1)}%). <b>Không nên</b> vào tiền.`;
+
+      const highConf = confidence >= 80 ? 'high-conf' : '';
+
+      let patternTagsHtml = '';
+      if (allPatterns.length > 0) {
+        const topPatterns = allPatterns.slice(0, 5);
+        patternTagsHtml = topPatterns.map((p, i) => {
+          const tagClass = i === 0 ? 'found' : (p.isStats ? '' : 'notfound');
+          const label = gt === 'chanle' ? p.type?.replace(/TÀI/g,'CHẴN').replace(/XỈU/g,'LẺ') : p.type;
+          return `<span class="pattern-tag ${tagClass}">${label || 'mẫu'} (${p.confidence.toFixed(0)}%)</span>`;
+        }).join(' ');
+      } else {
+        patternTagsHtml = '<span class="pattern-tag notfound">Chưa phát hiện mẫu rõ ràng</span>';
+      }
+
+      const content = document.getElementById(`toolMain_${gt}`);
+      content.innerHTML = `
+        <div class="prediction-box ${highConf}">
+          <div class="prediction-result ${displayPredClass}">${displayPred}</div>
+          <div style="margin-top:6px;font-size:0.9rem;color:#94a3b8;">Nguồn: ${source} · Độ tự tin: ${confidence.toFixed(1)}%</div>
+          <div class="confidence-bar"><div class="confidence-fill" style="width:${confidence}%;${confidence<55?'background:#ef4444;':confidence<70?'background:#f0a028;':''}"></div></div>
+        </div>
+        <div class="advice-box">💡 ${advice}</div>
+        <div style="margin:12px 0;font-size:0.85rem;">
+          <strong style="color:#f5c842;">🔍 Mẫu cầu phát hiện:</strong>
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">${patternTagsHtml}</div>
+        </div>
+        <div style="margin-top:12px;">
+          <strong style="color:#f5c842;">📊 Markov các bậc (${allMarkov.length} bậc):</strong>
+          <div class="markov-grid">
+            ${allMarkov.map(m => {
+              const bestClass = m.order === bestMarkov.order ? 'best' : '';
+              return `<div class="markov-item ${bestClass}">
+                <span class="order">B${m.order}</span>
+                <div style="color:#22c55e;">T ${m.T.toFixed(0)}%</div>
+                <div style="color:#f87171;">X ${m.X.toFixed(0)}%</div>
+                <div style="font-size:0.65rem;">${getDisplayPrediction(gt, m.predict)} (${m.confidence.toFixed(0)}%)</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+      content.classList.remove('hidden');
+    }
+
+    // ==================== AUTH ====================
+    function openAuthModal(tab) {
+      document.getElementById('authModal').classList.add('active');
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('regUsername').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirm').value = '';
+      document.getElementById('rememberMe').checked = false;
+      document.getElementById('authMessage').innerText = '';
+      switchAuthTab(tab);
+    }
+    function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+    function switchAuthTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+    }
+    function register() {
+      const u = document.getElementById('regUsername').value.trim();
+      const p = document.getElementById('regPassword').value;
+      const c = document.getElementById('regConfirm').value;
+      if (!u || !p) { document.getElementById('authMessage').innerText = 'Vui lòng điền đầy đủ.'; return; }
+      if (p !== c) { document.getElementById('authMessage').innerText = 'Mật khẩu không khớp.'; return; }
+      const users = getUsers();
+      if (users[u]) { document.getElementById('authMessage').innerText = 'Tên đăng nhập đã tồn tại.'; return; }
+      users[u] = { password: p, balance: 0, subscriptions: [], unactivatedKeys: [], depositHistory: [], purchaseHistory: [] };
+      saveUsers(users);
+      alert('Đăng ký thành công! Mời đăng nhập.');
+      document.getElementById('regUsername').value = '';
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirm').value = '';
+      switchAuthTab('login');
+      document.getElementById('loginUsername').value = u;
+    }
+    function login() {
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value;
+      const remember = document.getElementById('rememberMe').checked;
+      if (!u || !p) { document.getElementById('authMessage').innerText = 'Vui lòng nhập đầy đủ.'; return; }
+      const users = getUsers();
+      if (!users[u] || users[u].password !== p) { document.getElementById('authMessage').innerText = 'Sai thông tin.'; return; }
+      setCurrentUser(u);
+      remember ? setRememberedUser(u) : setRememberedUser(null);
+      closeAuthModal();
+      updateUI();
+    }
+    function logout() {
+      if (confirm('Bạn muốn đăng xuất?')) {
+        stopAllTools();
+        setCurrentUser(null);
+        setRememberedUser(null);
+        updateUI();
+        navigateTo('home');
+      }
+    }
+    function autoLogin() {
+      const remembered = getRememberedUser();
+      if (remembered && getUsers()[remembered]) { setCurrentUser(remembered); updateUI(); }
+    }
+
+    // ==================== ADMIN ====================
+    function openAdminLoginModal() {
+      document.getElementById('adminLoginModal').classList.add('active');
+      document.getElementById('adminUsername').value = '';
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('adminLoginMsg').innerText = '';
+    }
+    function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('active'); }
+    function loginAdmin() {
+      if (document.getElementById('adminUsername').value.trim() === 'bolaadmin' && document.getElementById('adminPassword').value === 'Duy15052009') {
+        setAdminLoggedIn(true);
+        closeAdminLoginModal();
+        updateUI();
+        loadPendingList();
+        loadUsersList();
+      } else { document.getElementById('adminLoginMsg').innerText = 'Sai thông tin admin.'; }
+    }
+    function logoutAdmin() { setAdminLoggedIn(false); updateUI(); }
+    function switchAdminTab(tab) {
+      document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
+      document.getElementById('tabUsers').classList.toggle('active', tab === 'users');
+      document.getElementById('adminTabPending').classList.toggle('hidden', tab !== 'pending');
+      document.getElementById('adminTabUsers').classList.toggle('hidden', tab !== 'users');
+      if (tab === 'pending') loadPendingList();
+      if (tab === 'users') loadUsersList();
+    }
+    function loadPendingList() {
+      if (!isAdminLoggedIn()) return;
+      const pending = getPendingDeposits();
+      const list = document.getElementById('pendingList');
+      const items = Object.entries(pending).filter(([, i]) => !i.approved && !i.rejected);
+      if (!items.length) { list.innerHTML = '<li style="padding:8px;color:#94a3b8;">Không có lệnh chờ.</li>'; return; }
+      list.innerHTML = items.map(([code, info]) => `<li style="padding:10px;border-bottom:1px solid #1a2740;display:flex;justify-content:space-between;align-items:center;">${code} - ${info.amount.toLocaleString()}đ (User: ${info.username}) <span><button class="btn-outline" style="padding:4px 12px;font-size:0.75rem;margin-left:6px;" onclick="approveDeposit('${code}')">Duyệt</button><button class="btn-outline" style="padding:4px 12px;font-size:0.75rem;margin-left:4px;border-color:#ef4444;color:#ef4444;" onclick="rejectDeposit('${code}')">Từ chối</button></span></li>`).join('');
+    }
+    function approveDeposit(code) {
+      if (!isAdminLoggedIn()) return;
+      const pending = getPendingDeposits();
+      if (!pending[code] || pending[code].approved) return;
+      pending[code].approved = true;
+      const uname = pending[code].username;
+      const amt = pending[code].amount;
+      savePendingDeposits(pending);
+      const users = getUsers();
+      const user = users[uname];
+      if (user) {
+        user.balance = (user.balance || 0) + amt;
+        user.depositHistory.push({ code, amount: amt, time: Date.now(), status: 'approved' });
+        users[uname] = user;
+        saveUsers(users);
+      }
+      alert('Đã duyệt ' + code);
+      loadPendingList();
+      if (uname === getCurrentUser()) updateUI();
+    }
+    function rejectDeposit(code) {
+      if (!isAdminLoggedIn()) return;
+      const pending = getPendingDeposits();
+      if (!pending[code]) return;
+      pending[code].rejected = true;
+      savePendingDeposits(pending);
+      alert('Đã từ chối ' + code);
+      loadPendingList();
+    }
+    function loadUsersList() {
+      if (!isAdminLoggedIn()) return;
+      const users = getUsers();
+      const tbody = document.getElementById('usersTableBody');
+      const rows = Object.entries(users).map(([username, data]) => {
+        const active = (data.subscriptions || []).filter(s => s.expiresAt > Date.now()).map(s => `${GAME_TYPES[s.gameType]?.name || s.gameType} (${getPackageName(s.package)})`).join(', ') || 'Không';
+        const unact = (data.unactivatedKeys || []).map(k => `${k.key} (${GAME_TYPES[k.gameType]?.name || k.gameType})`).join(', ') || 'Không';
+        return `<tr><td>${username}</td><td>${(data.balance || 0).toLocaleString()}đ</td><td>${active}</td><td>${unact}</td><td><button class="btn-outline" style="padding:4px 10px;font-size:0.7rem;" onclick="adminDeleteKey('${username}')">Xóa key</button></td></tr>`;
+      }).join('');
+      tbody.innerHTML = rows || '<tr><td colspan="5">Chưa có người chơi nào.</td></tr>';
+    }
+    function adminDeleteKey(username) {
+      const users = getUsers();
+      if (users[username] && users[username].unactivatedKeys.length > 0) {
+        users[username].unactivatedKeys = [];
+        saveUsers(users);
+        alert('Đã xóa key của ' + username);
+        loadUsersList();
+      } else { alert('Không có key để xóa.'); }
+    }
+
+    // ==================== NẠP, KÍCH HOẠT, TK ====================
+    function openDepositModal() { document.getElementById('depositModal').classList.add('active'); document.getElementById('depositInfo').classList.add('hidden'); document.getElementById('depositAmount').value = ''; document.getElementById('depositMsg').innerText = ''; }
+    function closeDepositModal() { document.getElementById('depositModal').classList.remove('active'); }
+    function createDeposit() {
+      const amt = parseInt(document.getElementById('depositAmount').value);
+      if (isNaN(amt) || amt < 50000) return alert('Tối thiểu 50,000đ');
+      const code = 'NAP' + Math.random().toString(36).substr(2, 6).toUpperCase();
+      const pending = getPendingDeposits();
+      pending[code] = { amount: amt, username: getCurrentUser(), created: Date.now(), approved: false, rejected: false };
+      savePendingDeposits(pending);
+      document.getElementById('qrDeposit').src = `https://img.vietqr.io/image/MB-499099999-compact2.png?amount=${amt}&addInfo=${code}&accountName=NGUYEN%20DUC%20DUY&size=300`;
+      document.getElementById('depositCode').innerText = code;
+      document.getElementById('depositAmountDisplay').innerText = amt.toLocaleString() + ' VNĐ';
+      document.getElementById('depositContent').innerText = code;
+      document.getElementById('depositInfo').classList.remove('hidden');
+      document.getElementById('depositMsg').innerText = 'Lệnh nạp đã tạo, chờ admin duyệt.';
+    }
+    function openActivateKeyModal() {
+      document.getElementById('activateKeyModal').classList.add('active');
+      document.getElementById('activateKeyInput').value = '';
+      document.getElementById('activateMsg').innerText = '';
+      const d = getUserData();
+      if (!d) return;
+      const list = document.getElementById('unactivatedKeysList');
+      if (d.unactivatedKeys.length === 0) list.innerHTML = '<li style="color:#94a3b8;">Không có key.</li>';
+      else list.innerHTML = d.unactivatedKeys.map(k => `<li style="padding:4px 0;">🔑 ${k.key} (${getPackageName(k.package)} - ${GAME_TYPES[k.gameType]?.name || k.gameType})</li>`).join('');
+    }
+    function closeActivateKeyModal() { document.getElementById('activateKeyModal').classList.remove('active'); }
+    function activateKey() {
+      const inputKey = document.getElementById('activateKeyInput').value.trim();
+      if (!inputKey) return;
+      const d = getUserData();
+      if (!d) return;
+      const idx = d.unactivatedKeys.findIndex(k => k.key === inputKey);
+      if (idx === -1) { document.getElementById('activateMsg').innerText = 'Key không hợp lệ.'; return; }
+      const ki = d.unactivatedKeys[idx];
+      const now = Date.now();
+      let exp;
+      switch (ki.package) { case '1h': exp = now + 3600000; break; case '1d': exp = now + 86400000; break; case '30d': exp = now + 30 * 86400000; break; case 'forever': exp = now + 1000 * 86400000 * 365 * 10; break; default: exp = now; }
+      d.subscriptions.push({ key: ki.key, package: ki.package, amount: ki.amount, gameType: ki.gameType, activatedAt: now, expiresAt: exp });
+      d.unactivatedKeys.splice(idx, 1);
+      saveUserData(d);
+      updateUI();
+      document.getElementById('activateMsg').innerText = '✅ Kích hoạt thành công! Tool đã sẵn sàng.';
+      setTimeout(closeActivateKeyModal, 1500);
+    }
+    function openAccountModal() {
+      const d = getUserData();
+      if (!d) return;
+      document.getElementById('accountIdDisplay').innerText = getCurrentUser();
+      document.getElementById('accountBalance').innerText = (d.balance || 0).toLocaleString() + 'đ';
+      document.getElementById('depositHistory').innerHTML = d.depositHistory.length === 0 ? '<li style="color:#94a3b8;">Chưa có.</li>' : d.depositHistory.map(h => `<li>🔹 ${h.code} - ${h.amount.toLocaleString()}đ (${h.status || 'approved'})</li>`).join('');
+      document.getElementById('purchaseHistory').innerHTML = d.purchaseHistory.length === 0 ? '<li style="color:#94a3b8;">Chưa có.</li>' : d.purchaseHistory.map(p => `<li>🛍️ ${p.key} (${getPackageName(p.package)} - ${GAME_TYPES[p.gameType]?.name || p.gameType}) - ${p.amount.toLocaleString()}đ</li>`).join('');
+      const active = d.subscriptions.filter(s => s.expiresAt > Date.now());
+      document.getElementById('activeSubscription').innerHTML = active.length === 0 ? '<p style="color:#94a3b8;">Không có gói hoạt động.</p>' : active.map(s => `<p>✅ ${s.key} (${getPackageName(s.package)} - ${GAME_TYPES[s.gameType]?.name || s.gameType}) đến ${new Date(s.expiresAt).toLocaleString()}</p>`).join('');
+      document.getElementById('accountModal').classList.add('active');
+    }
+    function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
+    function copyText(t) { navigator.clipboard.writeText(t).then(() => alert('Đã sao chép!')); }
+
+    window.onload = function() {
+      autoLogin();
+      updateUI();
+      navigateTo('home');
+      ['depositModal','activateKeyModal','accountModal','authModal','adminLoginModal','buyModal'].forEach(id => {
+        document.getElementById(id).addEventListener('click', e => { if (e.target === e.currentTarget) document.getElementById(id).classList.remove('active'); });
+      });
+      if (isAdminLoggedIn()) { updateUI(); loadPendingList(); loadUsersList(); }
+    };
+  </script>
+</body>
+</html>
